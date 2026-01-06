@@ -35,7 +35,7 @@
         <MudCard Class="mt-6" Elevation="4">
             <MudCardHeader>
                 <CardHeaderContent>
-                    <MudText Typo="Typo.h5">Груз: @_track.Title</MudText>
+                    <MudText Typo="Typo.h5">@_track.Title</MudText>
                     <MudChip T="string" Color="Color.Info" Variant="Variant.Text">
                         @_track.DeclaredTimestamp.ToString("dd.MM.yyyy HH:mm")
                     </MudChip>
@@ -49,18 +49,33 @@
                 
                 <MudText Typo="Typo.h6" Class="mb-4">История перемещений</MudText>
                 <MudTimeline TimelinePosition="TimelinePosition.Start">
-                    @* @foreach (var step in _track.History)
+                    @foreach (var handlingEvent in _track.HandlingEvents)
                     {
                         <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
-                            <ItemOpposite>
-                                <MudText Typo="Typo.body2" Color="Color.Secondary">@step.Date.ToString("dd.MM.yyyy HH:mm")</MudText>
-                            </ItemOpposite>
                             <ItemContent>
-                                <MudText Typo="Typo.h6">@step.Location</MudText>
-                                <MudText Typo="Typo.body2">@step.Description</MudText>
+                                
+                                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="w-100">
+                                    <MudText Typo="Typo.h6">@handlingEvent.HandlingEventTypeRu</MudText>
+                                    <MudChip T="string" Color="Color.Info" Variant="Variant.Text" Size="Size.Small">
+                                        @handlingEvent.Timestamp.ToString("dd.MM.yyyy HH:mm")
+                                    </MudChip>
+                                </MudStack>
+
+                                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="w-100">
+                                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                                        <MudIcon Icon="@HandlingEventIcon(handlingEvent)" Color="Color.Primary" />
+                                        <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                                            @handlingEvent.Location.Title
+                                        </MudText>
+                                    </MudStack>
+                                    <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                                        Количество: @handlingEvent.AllocatedQuantity
+                                    </MudText>
+                                </MudStack>
+
                             </ItemContent>
                         </MudTimelineItem>
-                    } *@
+                    }
                 </MudTimeline>
             </MudCardContent>
         </MudCard>
@@ -72,6 +87,13 @@
     private bool _isLoading;
     private ShipmentTrack? _track;
     private string? _errorMessage;
+
+
+    protected override void OnInitialized()
+    {
+        _searchString = "DLTU9018145";
+    }
+
 
     private async Task HandleSearch()
     {
@@ -98,4 +120,14 @@
             _isLoading = false;
         }
     }
+
+    private string HandlingEventIcon(HandlingEvent ev) => ev switch
+    {
+        { Location.Vehicle: not null }  => Icons.Material.Filled.LocalShipping,
+        { Location.Vessel: not null }   => Icons.Material.Filled.DirectionsBoat,
+        { Location.Yard: not null }     => Icons.Material.Filled.Warehouse,
+        { Location.Gate: not null }     => Icons.Material.Filled.MeetingRoom,
+        _                               => Icons.Material.Filled.HelpOutline
+    };
+
 }

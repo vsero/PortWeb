@@ -12,8 +12,13 @@ public class ShipmentTrack
 
     [JsonPropertyName("label")]
     public string Label { get; set; } = string.Empty;
+    
     [JsonPropertyName("title")]
     public string Title { get; set; } = string.Empty;
 
-    //public IEnumerable<HandlingEvent> Events { get; set; } = Array.Empty<ShipmentEvent>();
+    [JsonPropertyName("bl_number")]
+    public string BlNumber { get; set; } = string.Empty;
+
+    [JsonPropertyName("cargo_handling_events")]
+    public IEnumerable<HandlingEvent> HandlingEvents { get; set; } = [];
 }
