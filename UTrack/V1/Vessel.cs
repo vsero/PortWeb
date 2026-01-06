@@ -2,10 +2,10 @@
 {
     public class Vessel
     {
-        public Guid Uuid { get; set; } = Guid.NewGuid();
+        public Guid Uuid { get; set; }
         
-        public string Title { get; set; } = string.Empty;
+        public string Title { get; set; }
 
-        public string Callsign { get; set; } = string.Empty;
+        public string Callsign { get; set; }
     }
 }

@@ -8,9 +8,10 @@
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Отслеживание груза</MudText>
     
     <MudPaper Elevation="4" Class="pa-4">
-        <div class="d-flex align-center">
-            <MudTextField @bind-Value="_searchString" 
-                          Label="Номер контейнера или коносамента" 
+        
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            <MudTextField @bind-Value="_filter.SearchString" 
+                          Label="Номер контейнера, маркировка, коносамент" 
                           Variant="Variant.Outlined" 
                           Clearable="true"
                           OnKeyDown="@(e => e.Key == "Enter" ? HandleSearch() : Task.CompletedTask)" />
@@ -23,7 +24,36 @@
                 @if (_isLoading) { <MudProgressCircular Size="Size.Small" Indeterminate="true" /> }
                 else { <MudText>Найти</MudText> }
             </MudButton>
-        </div>
+        </MudStack>
+
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Class="mt-4" Spacing="4">
+            
+            <div style="width: 150px;">
+                <MudSelect T="CargoFlow"
+                           Label="Направление"
+                           @bind-Value="_filter.CargoFlow"
+                           Variant="Variant.Outlined"
+                           Dense="true"
+                           Margin="Margin.Dense"
+                           Style="width: fit-content; max-width: 150px;">
+                    <MudSelectItem Value="CargoFlow.Inbound">На сушу</MudSelectItem>
+                    <MudSelectItem Value="CargoFlow.Outbound">На море</MudSelectItem>
+                </MudSelect>
+            </div>
+
+            <MudCheckBox @bind-Value="_filter.IsContainerUnit"
+                         Label="Контейнер"
+                         Color="Color.Primary"
+                         Dense="true" />
+
+            <MudCheckBox @bind-Value="_filter.IsEmptyContainerUnit"
+                         Label="Порожний"
+                         Color="Color.Primary"
+                         Dense="true"
+                         Disabled="!_filter.IsContainerUnit" /> 
+
+        </MudStack>
+
     </MudPaper>
 
     @if (!string.IsNullOrEmpty(_errorMessage))
@@ -106,8 +136,21 @@
                 <MudDivider Class="my-4" />
 
                 <MudText Typo="Typo.h6" Class="mb-4">История перемещений</MudText>
+
+                @if (_eventsCount > 5)
+                {
+                    <MudStack Stretch="Stretch.Always">
+                        <MudButton OnClick="ToggleTimeline"
+                                   Variant="Variant.Text"
+                                   Color="Color.Primary"
+                                   Class="w-100"
+                                   StartIcon="@(_isExpanded ? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)">
+                            @(_isExpanded ? "Скрыть" : $"Показать еще ({_eventsCount - 5})")
+                        </MudButton>
+                    </MudStack>
+                }
                 <MudTimeline TimelinePosition="TimelinePosition.Start">
-                    @foreach (var handlingEvent in _track.HandlingEvents)
+                    @foreach (var handlingEvent in _visibleEvents)
                     {
                         <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
                             <ItemContent>
@@ -135,27 +178,38 @@
                         </MudTimelineItem>
                     }
                 </MudTimeline>
+
             </MudCardContent>
         </MudCard>
     }
 </MudContainer>
 
     @code {
-    private string _searchString = "";
+
     private bool _isLoading;
-    private ShipmentTrack? _track;
+    private bool _isExpanded;
     private string? _errorMessage;
+    private SearchFilter _filter = new SearchFilter();
+    private ShipmentTrack? _track;
+    private int _eventsCount;
+    private IEnumerable<HandlingEvent> _visibleEvents = [];
 
 
-    protected override void OnInitialized()
+    private void ToggleTimeline()
     {
-        _searchString = "DLTU9018145";
+        _isExpanded = !_isExpanded;
+        SetVisibleElements();
     }
 
+    private void SetVisibleElements()
+    {
+        if (_track is not null)
+            _visibleEvents = _isExpanded ? _track.HandlingEvents : _track.HandlingEvents.TakeLast(5);
+    }
 
     private async Task HandleSearch()
     {
-        if (string.IsNullOrWhiteSpace(_searchString)) return;
+        if (string.IsNullOrWhiteSpace(_filter.SearchString)) return;
 
         _isLoading = true;
         _errorMessage = null;
@@ -163,11 +217,17 @@
 
         try 
         {
-            (ShipmentTrack? track, string error) = await Api.ShipmentSearchAsync(_searchString);
+            (ShipmentTrack? track, string error) = await Api.ShipmentSearchAsync(_filter);
             _track = track;
 
             if (_track is null)
                 _errorMessage = string.IsNullOrWhiteSpace(error) ? "Груз не найден" : error;
+            else
+            {
+                _eventsCount = _track.HandlingEvents.Count();
+                SetVisibleElements();
+            }
+
         }
         catch (Exception ex)
         {
@@ -178,6 +238,7 @@
             _isLoading = false;
         }
     }
+
 
     private string HandlingEventIcon(HandlingEvent ev) => ev switch
     {
