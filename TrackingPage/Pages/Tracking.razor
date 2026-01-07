@@ -186,6 +186,8 @@
 
     @code {
 
+    private CancellationTokenSource? _cts;
+
     private bool _isLoading;
     private bool _isExpanded;
     private string? _errorMessage;
@@ -209,33 +211,27 @@
 
     private async Task HandleSearch()
     {
+        _cts?.Cancel();
+        _cts?.Dispose();
+
         if (string.IsNullOrWhiteSpace(_filter.SearchString)) return;
 
+        _cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         _isLoading = true;
         _errorMessage = null;
         _track = null;
 
-        try 
-        {
-            (ShipmentTrack? track, string error) = await Api.ShipmentSearchAsync(_filter);
-            _track = track;
+        (ShipmentTrack? track, string error) = await Api.ShipmentSearchAsync(_filter, _cts.Token);
 
-            if (_track is null)
-                _errorMessage = string.IsNullOrWhiteSpace(error) ? "Груз не найден" : error;
-            else
-            {
-                _eventsCount = _track.HandlingEvents.Count();
-                SetVisibleElements();
-            }
+        _isLoading = false;
+        _track = track;
 
-        }
-        catch (Exception ex)
+        if (_track is null)
+            _errorMessage = string.IsNullOrWhiteSpace(error) ? "Груз не найден" : error;
+        else
         {
-            _errorMessage = ex.Message;
-        }
-        finally
-        {
-            _isLoading = false;
+            _eventsCount = _track.HandlingEvents.Count();
+            SetVisibleElements();
         }
     }
 
@@ -248,5 +244,11 @@
         { Location.Gate: not null }     => Icons.Material.Filled.MeetingRoom,
         _                               => Icons.Material.Filled.HelpOutline
     };
+
+    public void Dispose()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+    }
 
 }

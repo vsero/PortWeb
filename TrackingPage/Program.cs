@@ -11,6 +11,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"]
                  ?? "https://kmtp.info/upapi/hs/utrackv1/";
 
+var xApiKey = builder.Configuration["ApiSettings:XApiKey"] ?? string.Empty;
 
 builder.Services.AddScoped(sp => new HttpClient
 {
@@ -18,7 +19,8 @@ builder.Services.AddScoped(sp => new HttpClient
     Timeout = TimeSpan.FromSeconds(30)
 });
 
-builder.Services.AddScoped<ApiClient>();
+builder.Services.AddScoped(sp => 
+    new ApiClient(sp.GetRequiredService<HttpClient>(), xApiKey));
 
 builder.Services.AddMudServices();
 

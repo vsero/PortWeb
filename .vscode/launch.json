@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": ".NET Launch (TrackingPage https)",
+        "type": "coreclr",
+        "request": "launch",
+        "program": "dotnet",
+        "args": [
+          "watch",
+          "--project",
+          "${workspaceFolder}/TrackingPage/TrackingPage.csproj",
+          "--launch-profile",
+          "https"
+        ],
+        "cwd": "${workspaceFolder}/TrackingPage",
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        },
+        "launchBrowser": {
+          "enabled": false
+        }
+      }
+    ]
+  }
