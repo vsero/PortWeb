@@ -7,8 +7,8 @@ namespace UTrack.V1;
 public class ApiClient(HttpClient httpClient, string xApiKey)
 {
 
-    public async Task<(ShipmentTrack? track, string error)> ShipmentSearchAsync(
-        SearchFilter filter,
+    public async Task<(CargoShipment? track, string error)> ShipmentSearchAsync(
+        CargoSearchFilter filter,
         CancellationToken cancellationToken = default)
     {
         try
@@ -34,8 +34,8 @@ public class ApiClient(HttpClient httpClient, string xApiKey)
 
     #region Private helpers
 
-    private async Task<(ShipmentTrack? track, string error)> SendAndProcess(
-        SearchFilter filter,
+    private async Task<(CargoShipment? track, string error)> SendAndProcess(
+        CargoSearchFilter filter,
         string searchBy,
         CancellationToken cancellationToken)
     {
@@ -45,7 +45,7 @@ public class ApiClient(HttpClient httpClient, string xApiKey)
     }
 
     private async Task<HttpRequestMessage> CreateRequest(
-        SearchFilter filter,
+        CargoSearchFilter filter,
         string searchBy = "label")
     {
         var queryParams = new Dictionary<string, string?>
@@ -74,13 +74,13 @@ public class ApiClient(HttpClient httpClient, string xApiKey)
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower) }
     };
 
-    private static async Task<(ShipmentTrack? track, string error)> ProcessResult(
+    private static async Task<(CargoShipment? track, string error)> ProcessResult(
         HttpResponseMessage response,
         CancellationToken cancellationToken)
     {
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var items = await response.Content.ReadFromJsonAsync<IEnumerable<ShipmentTrack>>(
+            var items = await response.Content.ReadFromJsonAsync<IEnumerable<CargoShipment>>(
                 _jsonOptions,
                 cancellationToken);
             return (items?.FirstOrDefault(), string.Empty);

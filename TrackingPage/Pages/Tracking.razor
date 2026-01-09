@@ -100,7 +100,7 @@
                     </MudItem>
                     <MudItem xs="8" sm="9">
                         <MudText Typo="Typo.body1" Class="ff-mono">
-                            <b>@_track.HandlingSummary.VesselCallTitle</b>
+                            <b>@_track.VesselCallTitle</b>
                         </MudText>
                     </MudItem>
 
@@ -118,7 +118,7 @@
                     </MudItem>
                     <MudItem xs="8" sm="9">
                         <MudText Typo="Typo.body1" Class="ff-mono">
-                            <b>@_track.HandlingSummary.IsStartedTimestamp.ToStringOrEmpty()</b>
+                            <b>@_track.IsStartedTimestamp.ToStringOrEmpty()</b>
                         </MudText>
                     </MudItem>
 
@@ -127,7 +127,7 @@
                     </MudItem>
                     <MudItem xs="8" sm="9">
                         <MudText Typo="Typo.body1" Class="ff-mono">
-                            <b>@_track.HandlingSummary.IsFinishedTimestamp.ToStringOrEmpty()</b>
+                            <b>@_track.IsFinishedTimestamp.ToStringOrEmpty()</b>
                         </MudText>
                     </MudItem>
 
@@ -191,10 +191,10 @@
     private bool _isLoading;
     private bool _isExpanded;
     private string? _errorMessage;
-    private SearchFilter _filter = new SearchFilter();
-    private ShipmentTrack? _track;
+    private CargoSearchFilter _filter = new CargoSearchFilter();
+    private CargoShipment? _track;
     private int _eventsCount;
-    private IEnumerable<HandlingEvent> _visibleEvents = [];
+    private IEnumerable<CargoHandlingEvent> _visibleEvents = [];
 
 
     private void ToggleTimeline()
@@ -221,7 +221,7 @@
         _errorMessage = null;
         _track = null;
 
-        (ShipmentTrack? track, string error) = await Api.ShipmentSearchAsync(_filter, _cts.Token);
+        (CargoShipment? track, string error) = await Api.ShipmentSearchAsync(_filter, _cts.Token);
 
         _isLoading = false;
         _track = track;
@@ -236,7 +236,7 @@
     }
 
 
-    private string HandlingEventIcon(HandlingEvent ev) => ev switch
+    private string HandlingEventIcon(CargoHandlingEvent ev) => ev switch
     {
         { Location.Vehicle: not null }  => Icons.Material.Filled.LocalShipping,
         { Location.Vessel: not null }   => Icons.Material.Filled.DirectionsBoat,

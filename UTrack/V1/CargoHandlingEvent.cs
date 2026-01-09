@@ -2,7 +2,7 @@
 
 namespace UTrack.V1;
 
-public enum HandlingEventType
+public enum CargoHandlingEventType
 {
     [JsonStringEnumMemberName("unloading")]
     Unloading,
@@ -18,14 +18,14 @@ public enum HandlingEventType
     YardOut
 }
 
-public class HandlingEvent
+public class CargoHandlingEvent
 {
     public DateTime Timestamp { get; set; } = DateTime.MinValue;
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public HandlingEventType Type { get; set; }
+    public CargoHandlingEventType Type { get; set; }
 
-    public HandlingEventLocation Location { get; set; } = new HandlingEventLocation();
+    public CargoHandlingEventLocation Location { get; set; } = new CargoHandlingEventLocation();
 
     public decimal Quantity { get; set; } = 0m;
 
@@ -33,12 +33,12 @@ public class HandlingEvent
     [JsonIgnore]
     public string TypeRu => Type switch
     {
-        HandlingEventType.Unloading => "Выгрузка",
-        HandlingEventType.Loading => "Погрузка",
-        HandlingEventType.GateIn => "Ввоз на территорию",
-        HandlingEventType.GateOut => "Вывоз с территории",
-        HandlingEventType.YardIn => "Помещен на хранение",
-        HandlingEventType.YardOut => "Снят с хранения",
+        CargoHandlingEventType.Unloading => "Выгрузка",
+        CargoHandlingEventType.Loading => "Погрузка",
+        CargoHandlingEventType.GateIn => "Ввоз на территорию",
+        CargoHandlingEventType.GateOut => "Вывоз с территории",
+        CargoHandlingEventType.YardIn => "Помещен на хранение",
+        CargoHandlingEventType.YardOut => "Снят с хранения",
         _ => "<Неизвестное событие>"
     };
 

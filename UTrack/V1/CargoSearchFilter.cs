@@ -6,7 +6,7 @@ public enum CargoFlow
     Outbound
 }
 
-public class SearchFilter
+public class CargoSearchFilter
 {
     public string SearchString { get; set; } = "DLTU9018145";
     public CargoFlow CargoFlow { get; set; } = CargoFlow.Inbound;

@@ -2,7 +2,7 @@
 
 namespace UTrack.V1;
 
-public class HandlingEventLocation
+public class CargoHandlingEventLocation
 {
     public Vehicle? Vehicle { get; set; }
     public Vessel? Vessel { get; set; }
