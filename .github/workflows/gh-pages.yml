@@ -40,6 +40,10 @@ jobs:
       run: |
         cp ./publish/wwwroot/index.html ./publish/wwwroot/404.html
 
+    - name: Create .nojekyll
+      run: |
+        touch ./publish/wwwroot/.nojekyll
+
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
