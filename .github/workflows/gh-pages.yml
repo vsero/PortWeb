@@ -31,18 +31,14 @@ jobs:
     - name: Publish
       run: dotnet publish --configuration Release --output ./publish --no-build
     
+    - name: Fix base href for GitHub Pages
+      run: |
+        REPO_NAME="${GITHUB_REPOSITORY#*/}"
+        sed -i "s|<base href=\"/\" />|<base href=\"/$REPO_NAME/\" />|g" ./output/wwwroot/index.html
+    
     - name: Add 404.html for SPA routing
       run: |
         cp ./publish/wwwroot/index.html ./publish/wwwroot/404.html
-    
-    #- name: Adjust base href for repo pages
-    #  run: |
-    #    REPO_NAME="${GITHUB_REPOSITORY##*/}"
-    #    INDEX_FILE="publish/wwwroot/index.html"
-    #    if [ -f "$INDEX_FILE" ]; then
-    #      # заменяет <base href="/" /> на <base href="/repo-name/" />
-    #      sed -i "s|<base href=\"/\" />|<base href=\"/$REPO_NAME/\" />|g" "$INDEX_FILE"
-    #    fi
 
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
