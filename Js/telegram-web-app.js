@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+
 // WebView
 (function () {
   var eventHandlers = {};
