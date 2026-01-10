@@ -21,4 +21,10 @@
     <Folder Include="wwwroot\Js\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\Js\telegram-web-app.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
