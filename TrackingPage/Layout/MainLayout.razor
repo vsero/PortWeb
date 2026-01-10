@@ -68,8 +68,12 @@
                 jsonData = await JS.InvokeAsync<string>("getTelegramData");
                 if (!string.IsNullOrEmpty(jsonData))
                 {
-                    var tgData = JsonSerializer.Deserialize<UserContext.TgInitData>(jsonData,
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+                    };
+                    var tgData = JsonSerializer.Deserialize<UserContext.TgInitData>(jsonData, options);
 
                     if (tgData?.User != null)
                     {
