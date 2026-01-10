@@ -6,30 +6,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TrackingPage</title>
     <base href="/PortWeb/" />
-    <link href="_framework/dotnet.x4k5g6jolq.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-z/JwP7nt+8W+nO5KqZOVH8HzUx8jStZ+TAKnuxGazw8=" />
+    <link href="_framework/dotnet.180tfbm157.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-YcGktgykwNckBm+6DqD9MEIEtXgg4oilVhx2U8Pb7OQ=" />
     <link rel="stylesheet" href="css/app.css" />
     <script type="importmap">{
   "imports": {
     "./_framework/blazor.webassembly.js": "./_framework/blazor.webassembly.66stpp682q.js",
+    "./_framework/dotnet.js": "./_framework/dotnet.180tfbm157.js",
     "./_framework/dotnet.native.js": "./_framework/dotnet.native.cs8mcre4gh.js",
-    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.0j6ezsi0n0.js",
-    "./_framework/dotnet.js": "./_framework/dotnet.x4k5g6jolq.js"
+    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.0j6ezsi0n0.js"
   },
   "scopes": {},
   "integrity": {
     "./_framework/blazor.webassembly.66stpp682q.js": "sha256-3lCWrko3zwspV40aQhs2S/IMkRSarnHRKIdkHhuXIBA=",
     "./_framework/blazor.webassembly.js": "sha256-3lCWrko3zwspV40aQhs2S/IMkRSarnHRKIdkHhuXIBA=",
-    "./_framework/dotnet.js": "sha256-z/JwP7nt+8W+nO5KqZOVH8HzUx8jStZ+TAKnuxGazw8=",
+    "./_framework/dotnet.180tfbm157.js": "sha256-YcGktgykwNckBm+6DqD9MEIEtXgg4oilVhx2U8Pb7OQ=",
+    "./_framework/dotnet.js": "sha256-YcGktgykwNckBm+6DqD9MEIEtXgg4oilVhx2U8Pb7OQ=",
     "./_framework/dotnet.native.cs8mcre4gh.js": "sha256-/I3SDHIle7heAxlUGBrgxax+lkKyWyRLBVEJmTHJSCs=",
     "./_framework/dotnet.native.js": "sha256-/I3SDHIle7heAxlUGBrgxax+lkKyWyRLBVEJmTHJSCs=",
     "./_framework/dotnet.runtime.0j6ezsi0n0.js": "sha256-jCsbbdXoVd1zzGc0fQT2sz4mKuv0ANdurPVGo5Sc2jg=",
-    "./_framework/dotnet.runtime.js": "sha256-jCsbbdXoVd1zzGc0fQT2sz4mKuv0ANdurPVGo5Sc2jg=",
-    "./_framework/dotnet.x4k5g6jolq.js": "sha256-z/JwP7nt+8W+nO5KqZOVH8HzUx8jStZ+TAKnuxGazw8="
+    "./_framework/dotnet.runtime.js": "sha256-jCsbbdXoVd1zzGc0fQT2sz4mKuv0ANdurPVGo5Sc2jg="
   }
 }</script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+
+    <style>
+        :root {
+            /* MudBlazor theme */
+            --app-bg: #F5F7FA;
+            --app-text: #1F2933; 
+            --app-loader-stroke: #0088CC; /* MudBlazor Primary */
+            --app-loader-bg: var(--app-bg);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* MudBlazor Dark Mode */
+                --app-bg: #32333D;
+                --app-text: #E6F4FF;
+                --app-loader-stroke: #26A5E4;
+                --app-loader-bg: var(--app-bg);
+            }
+        }
+
+        html, body {
+            background-color: var(--app-bg);
+        }
+
+        .loading-progress circle {
+            fill: none;
+            stroke: var(--app-loader-bg);
+        }
+
+            .loading-progress circle:last-child {
+                stroke: var(--app-loader-stroke);
+            }
+
+        .loading-progress-text {
+            fill: var(--app-text); /* Если текст внутри SVG (как <text>) */
+            color: var(--app-text); /* Если текст в обычном div */
+            font-family: "Roboto", sans-serif;
+            font-weight: 500;
+        }
+    </style>
+
 </head>
 
 <body>
