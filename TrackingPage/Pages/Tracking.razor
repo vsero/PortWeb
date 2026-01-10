@@ -79,7 +79,7 @@
                             @_track.Title
                         </MudText>
 
-                        <MudStack Spacing="0" AlignItems="AlignItems.Start" AlignSelf="AlignSelf.Start" Class="flex-none">
+                        <MudStack Spacing="0" AlignItems="AlignItems.End" AlignSelf="AlignSelf.Start" Class="flex-none">
                             <MudChip T="string"
                                      Color="Color.Info"
                                      Variant="Variant.Text"
@@ -179,11 +179,12 @@
                                     </MudItem>
                                     <MudItem xs="4">
                                         <MudStack AlignItems="AlignItems.End" Spacing="0" Class="flex-grow-none">
-                                            <MudChip T="string" Color="Color.Info" Variant="Variant.Text" Size="Size.Small" Class="text-truncate">
-                                                @handlingEvent.Timestamp.ToString("dd.MM.yyyy HH:mm")
-                                            </MudChip>
+                                            <MudStack Row="true" Wrap="Wrap.Wrap" Justify="Justify.FlexEnd" Spacing="2">
+                                                <MudText Typo="Typo.body2">@($"{handlingEvent.Timestamp:dd.MM.yyyy}")</MudText>
+                                                <MudText Typo="Typo.body2"> @($"{handlingEvent.Timestamp:HH:mm}")</MudText>
+                                            </MudStack>
                                             <MudText Typo="Typo.body2" Class="mud-text-secondary text-truncate">
-                                                Количество: @handlingEvent.Quantity
+                                                Кол-во: @handlingEvent.Quantity
                                             </MudText>
                                         </MudStack>
                                     </MudItem>
