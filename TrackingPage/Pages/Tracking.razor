@@ -44,16 +44,19 @@
                 </MudSelect>
             </div>
 
-            <MudCheckBox @bind-Value="_filter.IsContainerUnit"
-                         Label="Контейнер"
-                         Color="Color.Primary"
-                         Dense="true" />
+            <MudStack Row="true" Wrap="Wrap.Wrap" Spacing="2">
+                <MudCheckBox @bind-Value="_filter.IsContainerUnit"
+                             Label="Контейнер"
+                             Color="Color.Primary"
+                             Dense="true" />
 
-            <MudCheckBox @bind-Value="_filter.IsEmptyContainerUnit"
-                         Label="Порожний"
-                         Color="Color.Primary"
-                         Dense="true"
-                         Disabled="!_filter.IsContainerUnit" /> 
+                <MudCheckBox @bind-Value="_filter.IsEmptyContainerUnit"
+                             Label="Порожний"
+                             Color="Color.Primary"
+                             Dense="true"
+                             Disabled="!_filter.IsContainerUnit" />
+            </MudStack>
+
 
         </MudStack>
 
@@ -76,7 +79,7 @@
                             @_track.Title
                         </MudText>
 
-                        <MudStack Spacing="0" AlignItems="AlignItems.End" AlignSelf="AlignSelf.Start" Class="flex-none">
+                        <MudStack Spacing="0" AlignItems="AlignItems.Start" AlignSelf="AlignSelf.Start" Class="flex-none">
                             <MudChip T="string"
                                      Color="Color.Info"
                                      Variant="Variant.Text"
@@ -152,30 +155,39 @@
                         </MudButton>
                     </MudStack>
                 }
-                <MudTimeline TimelinePosition="TimelinePosition.Start">
+                
+                <MudTimeline TimelinePosition="TimelinePosition.Start"
+                             TimelineOrientation="TimelineOrientation.Vertical"
+                             Class="pa-0 ma-0 custom-compact-timeline">
+
                     @foreach (var handlingEvent in _visibleEvents)
                     {
-                        <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
+                        <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled" Gutters="false">
                             <ItemContent>
-                                
-                                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" Class="w-100">
-                                    <MudText Typo="Typo.h6">@handlingEvent.TypeRu</MudText>
-                                    <MudChip T="string" Color="Color.Info" Variant="Variant.Text" Size="Size.Small">
-                                        @handlingEvent.Timestamp.ToString("dd.MM.yyyy HH:mm")
-                                    </MudChip>
-                                </MudStack>
 
-                                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="w-100">
-                                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                                        <MudIcon Icon="@HandlingEventIcon(handlingEvent)" Color="Color.Primary" />
-                                        <MudText Typo="Typo.body2" Class="mud-text-secondary">
-                                            @handlingEvent.Location.Title
-                                        </MudText>
-                                    </MudStack>
-                                    <MudText Typo="Typo.body2" Class="mud-text-secondary">
-                                        Количество: @handlingEvent.Quantity
-                                    </MudText>
-                                </MudStack>
+                                <MudGrid Spacing="2">
+                                    <MudItem xs="8">
+                                        <MudStack Spacing="0" Class="flex-grow-1">
+                                            <MudText Typo="Typo.h6">@handlingEvent.TypeRu</MudText>
+                                            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                                                <MudIcon Icon="@HandlingEventIcon(handlingEvent)" Color="Color.Primary" />
+                                                <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                                                    @handlingEvent.Location.Title
+                                                </MudText>
+                                            </MudStack>
+                                        </MudStack>
+                                    </MudItem>
+                                    <MudItem xs="4">
+                                        <MudStack AlignItems="AlignItems.End" Spacing="0" Class="flex-grow-none">
+                                            <MudChip T="string" Color="Color.Info" Variant="Variant.Text" Size="Size.Small" Class="text-truncate">
+                                                @handlingEvent.Timestamp.ToString("dd.MM.yyyy HH:mm")
+                                            </MudChip>
+                                            <MudText Typo="Typo.body2" Class="mud-text-secondary text-truncate">
+                                                Количество: @handlingEvent.Quantity
+                                            </MudText>
+                                        </MudStack>
+                                    </MudItem>
+                                </MudGrid>
 
                             </ItemContent>
                         </MudTimelineItem>
