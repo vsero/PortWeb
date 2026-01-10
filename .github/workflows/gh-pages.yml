@@ -32,6 +32,13 @@ jobs:
       run: |
         REPO_NAME="${GITHUB_REPOSITORY#*/}"
         sed -i "s|<base href=\"/\" />|<base href=\"/$REPO_NAME/\" />|g" ./publish/wwwroot/index.html
+
+    - name: App Settings Variables
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: './wwwroot/appsettings.json'
+      env:
+        ApiSettings.XApiKey: ${{ secrets.API_KEY }}    
     
     - name: Add 404.html for SPA routing
       run: |
