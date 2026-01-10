@@ -24,14 +24,6 @@ jobs:
     
     - name: Restore dependencies
       run: dotnet restore
-    
-    - name: Publish
-      run: dotnet publish --configuration Release --output ./publish
-    
-    - name: Fix base href for GitHub Pages
-      run: |
-        REPO_NAME="${GITHUB_REPOSITORY#*/}"
-        sed -i "s|<base href=\"/\" />|<base href=\"/$REPO_NAME/\" />|g" ./publish/wwwroot/index.html
 
     - name: App Settings Variables
       uses: microsoft/variable-substitution@v1
@@ -39,6 +31,14 @@ jobs:
         files: './wwwroot/appsettings.json'
       env:
         ApiSettings.XApiKey: ${{ secrets.API_KEY }}    
+
+    - name: Publish
+      run: dotnet publish --configuration Release --output ./publish
+    
+    - name: Fix base href for GitHub Pages
+      run: |
+        REPO_NAME="${GITHUB_REPOSITORY#*/}"
+        sed -i "s|<base href=\"/\" />|<base href=\"/$REPO_NAME/\" />|g" ./publish/wwwroot/index.html    
     
     - name: Add 404.html for SPA routing
       run: |
