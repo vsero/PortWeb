@@ -86,7 +86,7 @@ public class ApiClient(HttpClient httpClient, string xApiKey)
         var queryParams = new Dictionary<string, string?>
         {
             { "search_by", searchBy },
-            { "cargo_flow", filter.CargoFlow.ToString().ToLowerInvariant() },
+            { "cargo_flow", filter.CargoFlow.ToSnakeCase() },
             { "is_container_unit", filter.IsContainerUnit.ToString().ToLowerInvariant() },
             { "is_empty_container_unit", filter.IsEmptyContainerUnit.ToString().ToLowerInvariant() }
         };
@@ -131,5 +131,13 @@ public class ApiClient(HttpClient httpClient, string xApiKey)
     }
 
     #endregion
-    
+
+}
+
+public static class EnumExtensions
+{
+    public static string ToSnakeCase(this Enum value)
+    {
+        return System.Text.Json.JsonNamingPolicy.SnakeCaseLower.ConvertName(value.ToString());
+    }
 }
