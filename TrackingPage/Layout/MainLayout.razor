@@ -9,39 +9,36 @@
 <MudPopoverProvider />
 
 <MudLayout>
-    <CascadingValue Value="UserContext">
-        @Body
-    </CascadingValue>
-</MudLayout>
 
-@* <MudLayout>
-    @if (_isMobile)
-    {
-        <MudAppBar Bottom="true" Fixed="true" Color="Color.Primary" Elevation="4">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerOpen = !DrawerOpen)" />
-            <MudSpacer />
-            <MudText Typo="Typo.h6" Class="flex-grow-1 text-center">PortWeb</MudText>
-            <MudSpacer />
-            <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" />
-        </MudAppBar>
-    }
-    else
-    {
-        <MudAppBar Fixed="true" Color="Color.Primary" Elevation="1">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerOpen = !DrawerOpen)" />
-            <MudText Typo="Typo.h6" Class="ml-3">Tracking Project 2026</MudText>
-            <MudSpacer />
-            <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" />
-            <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" />
-        </MudAppBar>
-    }
+    @* Виден только на широких экранах (ПК) *@
+   <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <MudAppBar>Tracking</MudAppBar>
+        <MudDrawer Open="true" ClipMode="DrawerClipMode.Always" Elevation="2">
+            <MudNavMenu>
+                <MudNavLink href="/tracking" Icon="@Icons.Material.Filled.Search">Трекинг</MudNavLink>
+                <MudNavLink href="/vessels" Icon="@Icons.Material.Filled.DirectionsBoat">Суда</MudNavLink>
+            </MudNavMenu>
+        </MudDrawer>
+    </MudHidden>
 
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="my-4">
+    @* Виден только на узких экранах (Мобилки/Telegram) *@
+    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+        <MudAppBar Bottom="true" Fixed="true">
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Material.Filled.Search" href="/tracking" />
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Material.Filled.DirectionsBoat" href="/vessels" />
+            <MudSpacer />
+        </MudAppBar>
+    </MudHidden>
+    
+    <MudMainContent Class="pt-0 pt-md-16">
+        <CascadingValue Value="UserContext">
             @Body
-        </MudContainer>
+        </CascadingValue>
     </MudMainContent>
-</MudLayout> *@
+
+</MudLayout>
 
 @code {
 

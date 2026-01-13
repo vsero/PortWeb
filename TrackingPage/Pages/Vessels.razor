@@ -1,0 +1,251 @@
+﻿@page "/vessels"
+@using UTrack
+@using UTrack.V1
+@inject ApiClient Api
+
+@{
+    RenderFragment<VesselCall> VesselCard = (call) => __builder =>
+    {
+        <MudItem xs="12" sm="6" md="4" lg="3">
+            <MudCard Elevation="2" Class="pa-4 h-100 d-flex flex-column">
+                
+                @* Заголовок карточки *@
+                <div class="mb-2">
+                   <div class="d-flex align-center gap-1 flex-grow-1">
+                        <MudText Typo="Typo.caption" Class="mud-text-secondary">@call.Stage</MudText>
+                        <MudSpacer />
+                        @if (call.Stage == VesselCallStage.Waiting)
+                        {
+                            <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Warning">На рейде</MudChip>
+                        }
+                        @if (call.Stage == VesselCallStage.Processing && call.StartUnloadingTimestamp > DateTime.MinValue)
+                        {
+                            <MudChip 
+                                T="string" 
+                                Size="Size.Small"
+                                Variant="Variant.Outlined"
+                                Color="@(call.UnStats.IsUnloaded ? Color.Success : Color.Warning)">
+                                @(call.UnStats.IsUnloaded ? "Выгружен" : "Выгрузка")
+                             </MudChip>
+                        }
+                        @if (call.Stage == VesselCallStage.Processing && call.StartLoadingTimestamp > DateTime.MinValue)
+                        {
+                            <MudChip T="string"
+                                     Size="Size.Small"
+                                     Variant="Variant.Outlined"
+                                     Color="Color.Warning">
+                                Погрузка
+                            </MudChip>
+                        }
+                    </div>
+                    <MudText Typo="Typo.h6" Class="text-truncate mt-n1" Color="Color.Primary">
+                        @call.Title
+                    </MudText>
+                </div>
+
+                @* Маршрут *@
+                <div class="mb-3">
+                    <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
+                        <MudIcon Icon="@Icons.Material.Filled.Place" Size="Size.Small" Color="Color.Secondary" />
+                        <MudText Typo="Typo.body2" Style="font-weight: 500">
+                            @call.PortOfDeparture?.Title
+                        </MudText>
+                        <MudIcon Icon="@Icons.Material.Filled.ArrowForward" Size="Size.Small" />
+                        <MudText Typo="Typo.body2" Style="font-weight: 500">
+                            @call.PortOfDestination?.Title
+                        </MudText>
+                    </MudStack>
+                </div>
+                
+                <MudDivider Class="mb-3" />
+
+                @* Тело карточки (Даты) *@
+                <MudStack Spacing="1" Class="flex-grow-1">
+                    @if (call.Stage == VesselCallStage.Expected || call.Stage == VesselCallStage.Waiting)
+                    {
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.caption">Ожидается:</MudText>
+                            <MudText Typo="Typo.caption">@call.DeclaredTimestamp.ToStringOrEmpty("dd.MM.yyyy")</MudText>
+                        </div>
+                    }
+                    @if (call.Stage == VesselCallStage.Waiting)
+                    {
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.caption">На рейде с:</MudText>
+                            <MudText Typo="Typo.caption">@call.StartWaitingTimestamp.ToStringOrEmpty()</MudText>
+                        </div>
+                    }
+                    @if (call.Stage == VesselCallStage.Processing && call.Berth is not null)
+                    {
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.caption">@call.Berth.TerminalTitle:</MudText>
+                            <MudText Typo="Typo.body2">@call.Berth.Title</MudText>
+                        </div>
+                    }
+                    @if (call.Stage == VesselCallStage.Processing && call.StartUnloadingTimestamp > DateTime.MinValue)
+                    {
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.caption">Начало выгрузки:</MudText>
+                            <MudText Typo="Typo.caption">@call.StartUnloadingTimestamp.ToStringOrEmpty()</MudText>
+                        </div>
+                    }
+                    @if (call.Stage == VesselCallStage.Processing && call.StartLoadingTimestamp > DateTime.MinValue)
+                    {
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.caption">Начало погрузки:</MudText>
+                            <MudText Typo="Typo.caption">@call.StartLoadingTimestamp.ToStringOrEmpty()</MudText>
+                        </div>
+                    }
+                    @if (call.DepartureTimestamp > DateTime.MinValue)
+                    {
+                        <div class="d-flex justify-space-between">
+                            <MudText Typo="Typo.caption">Отход:</MudText>
+                            <MudText Typo="Typo.caption">@call.DepartureTimestamp.ToStringOrEmpty()</MudText>
+                        </div>
+                    }                    
+                </MudStack>
+
+                @* Прогресс выгрузки (только для обработки) *@
+                @if (Processing.Contains(call) && @call.UnStats.TotalPercent > 0)
+                {
+                    <div class="mt-4">
+                        <div class="d-flex justify-space-between mb-1">
+                            <MudText Typo="Typo.caption">Выгружено</MudText>
+                            <MudText Typo="Typo.caption">@call.UnStats.TotalPercent %</MudText>
+                        </div>
+                        <MudProgressLinear Color="Color.Info" Value="@call.UnStats.TotalPercent" Class="mud-width-full" />
+                    </div>
+                }
+            </MudCard>
+        </MudItem>
+    };
+}
+
+
+@if (_isLoading)
+{
+    <div class="d-flex justify-center align-center" style="height: 80vh;">
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+    </div>
+}
+
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <MudAlert Severity="Severity.Error" Class="mt-4">@_errorMessage</MudAlert>
+}
+
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="pa-4">
+<MudStack Spacing="8" Class="mt-4">
+
+    @if (Processing.Any())
+    {
+        <div>
+            <MudAlert Severity="Severity.Success" Variant="Variant.Outlined" NoIcon="true" Class="my-2">
+                <div class="d-flex align-center gap-2">
+                    <MudIcon Icon="@Icons.Material.Filled.Sync" Color="Color.Inherit" />
+                    <MudText>В обработке:</MudText>
+                </div>
+            </MudAlert>
+            <MudGrid Spacing="3">
+                @foreach (var call in Processing)
+                {
+                    @VesselCard(call)
+                }
+            </MudGrid>
+        </div>
+    }
+
+    @if (Expected.Any())
+    {
+        <div>
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined" NoIcon="true" Class="my-2">
+                <div class="d-flex align-center gap-2">
+                    <MudIcon Icon="@Icons.Material.Filled.EditCalendar" Color="Color.Inherit" />
+                    <MudText>Ожидаются:</MudText>
+                </div>
+            </MudAlert>
+            <MudGrid Spacing="3">
+                @foreach (var call in Expected)
+                {
+                    @VesselCard(call)
+                }
+            </MudGrid>
+        </div>
+    }
+
+    @if (Departured.Any())
+    {
+        <div>
+            <MudAlert Severity="Severity.Info" Variant="Variant.Outlined" NoIcon="true" Class="my-2">
+                <div class="d-flex align-center gap-2">
+                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Inherit" />
+                    <MudText>Завершены:</MudText>
+                </div>
+            </MudAlert>
+            <MudGrid Spacing="3">
+                @foreach (var call in Departured)
+                {
+                    @VesselCard(call)
+                }
+            </MudGrid>
+        </div>
+    }
+
+</MudStack>
+</MudContainer>
+
+@code {
+
+    private bool _isLoading;
+    private string _errorMessage = string.Empty;
+    private CancellationTokenSource? _cts;
+    private List<VesselCall> VesselCalls { get; set; } = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        _ = GetVesselCalls();
+         return base.OnInitializedAsync();
+    }
+
+    // Категории
+    private IEnumerable<VesselCall> Processing => VesselCalls.Where(v =>
+        (v.Stage == VesselCallStage.Processing));
+
+    private IEnumerable<VesselCall> Departured => VesselCalls.Where(v =>
+        v.Stage == VesselCallStage.Departured);
+
+    private IEnumerable<VesselCall> Waiting => VesselCalls.Where(v =>
+        v.Stage == VesselCallStage.Waiting);
+
+    private IEnumerable<VesselCall> Expected => VesselCalls.Where(v =>
+        v.Stage == VesselCallStage.Expected);
+
+
+    private async Task GetVesselCalls()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+
+        _cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        _isLoading = true;
+        _errorMessage = string.Empty;
+        VesselCalls.Clear();
+
+        (IEnumerable<VesselCall>? vesselCalls, _errorMessage) = await Api.VesselCallListAsync(_cts.Token);
+
+        _isLoading = false;
+        if (vesselCalls is null) return;
+        VesselCalls = vesselCalls.ToList();
+        StateHasChanged();
+
+    }
+
+    public void Dispose()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+    }
+
+}

@@ -6,6 +6,41 @@ using System.Text.Json.Serialization;
 namespace UTrack.V1;
 public class ApiClient(HttpClient httpClient, string xApiKey)
 {
+    public async Task<(IEnumerable<VesselCall>? vesselCalls, string error)> VesselCallListAsync(
+       CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            
+            var request = new HttpRequestMessage(HttpMethod.Get, "vesselcall/list");
+            request.Headers.Add("x-api-key", xApiKey);
+            using var response = await httpClient.SendAsync(request, cancellationToken);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var items = await response.Content.ReadFromJsonAsync<IEnumerable<VesselCall>>(
+                    _jsonOptions,
+                    cancellationToken);
+                return (items, string.Empty);
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                return (null, string.Empty);
+            }
+
+            var errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            return (null, $"There is some problem occurred: {response.StatusCode}, Content: {errorContent}");
+
+        }
+        catch (OperationCanceledException)
+        {
+            return (null, "Request was canceled");
+        }
+        catch (Exception ex)
+        {
+            return (null, $"Unexpected error: {ex.Message}");
+        }
+    }
 
     public async Task<(CargoShipment? track, string error)> ShipmentSearchAsync(
         CargoSearchFilter filter,

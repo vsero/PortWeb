@@ -1,5 +1,5 @@
 ﻿@page "/"
-@using System.Linq
+@page "/tracking"
 @using UTrack
 @using UTrack.V1
 @inject ApiClient Api
@@ -10,28 +10,35 @@
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
         <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Отслеживание груза</MudText>
     </MudHidden>
-    
+
     <MudPaper Elevation="4" Class="pa-4">
-        
+
         <MudStack Row="true" AlignItems="AlignItems.Center">
-            <MudTextField @bind-Value="_filter.SearchString" 
-                          Label="Номер контейнера, маркировка, коносамент" 
-                          Variant="Variant.Outlined" 
+            <MudTextField @bind-Value="_filter.SearchString"
+                          Label="Номер контейнера, маркировка, коносамент"
+                          Variant="Variant.Outlined"
                           Clearable="true"
                           OnKeyDown="@(e => e.Key == "Enter" ? HandleSearch() : Task.CompletedTask)" />
-            <MudButton Variant="Variant.Filled" 
-                       Color="Color.Primary" 
-                       Size="Size.Large" 
-                       OnClick="HandleSearch" 
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Large"
+                       OnClick="HandleSearch"
                        Class="ml-4"
                        Disabled="_isLoading">
-                @if (_isLoading) { <MudProgressCircular Size="Size.Small" Indeterminate="true" /> }
-                else { <MudText>Найти</MudText> }
+                @if (_isLoading)
+                {
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+                }
+                else
+                {
+
+                    <MudText>Найти</MudText>
+                }
             </MudButton>
         </MudStack>
 
         <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Class="mt-4" Spacing="4">
-            
+
             <div style="width: 150px;">
                 <MudSelect T="CargoFlow"
                            Label="Направление"
@@ -40,8 +47,8 @@
                            Dense="true"
                            Margin="Margin.Dense"
                            Style="width: fit-content; max-width: 150px;">
-                    <MudSelectItem Value="CargoFlow.Inbound">На сушу</MudSelectItem>
-                    <MudSelectItem Value="CargoFlow.Outbound">На море</MudSelectItem>
+                    <MudSelectItem Value="CargoFlow.FromSea">С моря</MudSelectItem>
+                    <MudSelectItem Value="CargoFlow.FromLand">С суши</MudSelectItem>
                 </MudSelect>
             </div>
 
@@ -71,11 +78,11 @@
     @if (_track != null)
     {
         <MudCard Class="mt-6" Elevation="4">
-            
+
             <MudCardHeader>
-                <CardHeaderContent>                    
+                <CardHeaderContent>
                     <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" Class="w-100">
-                        
+
                         <MudText Typo="Typo.h5" Class="flex-grow-1 text-truncate">
                             @_track.Title
                         </MudText>
@@ -93,15 +100,15 @@
                                 Кол-во: @_track.TotalQuantity
                             </MudText>
                         </MudStack>
-                        
+
                     </MudStack>
                 </CardHeaderContent>
             </MudCardHeader>
-           
+
             <MudCardContent>
 
                 <MudGrid Spacing="1" Class="mt-2">
-                    
+
                     <MudItem xs="4" sm="3">
                         <MudText Typo="Typo.body1">Судозаход:</MudText>
                     </MudItem>
@@ -156,7 +163,7 @@
                         </MudButton>
                     </MudStack>
                 }
-                
+
                 @if (UserContext.IsMobile)
                 {
                     <MudStack Spacing="2">
@@ -180,16 +187,15 @@
                                 </ItemContent>
                             </MudTimelineItem>
                         }
-                    </MudTimeline>                    
+                    </MudTimeline>
                 }
 
             </MudCardContent>
         </MudCard>
     }
 </MudContainer>
-
-
-    @code {
+    
+@code {
 
     #region RenderFragments
 
@@ -223,21 +229,14 @@
 
     [CascadingParameter] public UserContext UserContext { get; set; } = new();
 
-    private CancellationTokenSource? _cts;
-
     private bool _isLoading;
     private bool _isExpanded;
-    private string? _errorMessage;
-    private CargoSearchFilter _filter = new CargoSearchFilter();
-    private CargoShipment? _track;
     private int _eventsCount;
+    private string? _errorMessage;
+    private CargoSearchFilter _filter = new();
+    private CargoShipment? _track;
+    private CancellationTokenSource? _cts;
     private IEnumerable<CargoHandlingEvent> _visibleEvents = [];
-
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        var uc = UserContext;
-    }
 
     private void ToggleTimeline()
     {
