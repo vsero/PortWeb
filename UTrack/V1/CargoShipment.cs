@@ -12,7 +12,9 @@ public class CargoShipment
     public DateTime IsStartedTimestamp { get; set; }
     public bool IsFinished { get; set; }
     public DateTime IsFinishedTimestamp { get; set; }
-    public string CargoFlow { get; set; } = string.Empty;
+    public CargoFlow CargoFlow { get; set; } = CargoFlow.FromLand;
     public string VesselCallTitle { get; set; } = string.Empty;
     public IEnumerable<CargoHandlingEvent> HandlingEvents { get; set; } = [];
 }
+
+//DLTU9018145

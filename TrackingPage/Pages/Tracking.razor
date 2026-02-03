@@ -1,9 +1,12 @@
 ﻿@page "/"
 @page "/tracking"
+@using Microsoft.Extensions.Localization
 @using UTrack
 @using UTrack.V1
+@using LM = UTrack.Resources.Locale
 @inject ApiClient Api
 @inject IBrowserViewportService ViewportService
+@inject IStringLocalizer<UTrack.Resources.Locale> LSM
 
 <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5 mb-5">
 
@@ -47,19 +50,19 @@
                            Dense="true"
                            Margin="Margin.Dense"
                            Style="width: fit-content; max-width: 150px;">
-                    <MudSelectItem Value="CargoFlow.FromSea">С моря</MudSelectItem>
-                    <MudSelectItem Value="CargoFlow.FromLand">С суши</MudSelectItem>
+                    <MudSelectItem Value="CargoFlow.FromSea">@LM.FromSea</MudSelectItem>
+                    <MudSelectItem Value="CargoFlow.FromLand">@LM.FromLand</MudSelectItem>
                 </MudSelect>
             </div>
 
             <MudStack Row="true" Wrap="Wrap.Wrap" Spacing="2">
                 <MudCheckBox @bind-Value="_filter.IsContainerUnit"
-                             Label="Контейнер"
+                             Label=@LM.Container
                              Color="Color.Primary"
                              Dense="true" />
 
                 <MudCheckBox @bind-Value="_filter.IsEmptyContainerUnit"
-                             Label="Порожний"
+                             Label=@LM.Empty
                              Color="Color.Primary"
                              Dense="true"
                              Disabled="!_filter.IsContainerUnit" />
@@ -93,11 +96,11 @@
                                      Variant="Variant.Text"
                                      Size="Size.Small"
                                      Class="ma-0">
-                                от @_track.DeclaredTimestamp.ToStringOrEmpty("dd.MM.yyyy")
+                                @($"{LM.asof} {_track.DeclaredTimestamp.ToStringOrEmpty(LM.DateFormat)}")
                             </MudChip>
 
                             <MudText Typo="Typo.body2" Class="mud-text-secondary px-2">
-                                Кол-во: @_track.TotalQuantity
+                                @($"{LM.Qty}: {_track.TotalQuantity}")
                             </MudText>
                         </MudStack>
 
@@ -110,7 +113,7 @@
                 <MudGrid Spacing="1" Class="mt-2">
 
                     <MudItem xs="4" sm="3">
-                        <MudText Typo="Typo.body1">Судозаход:</MudText>
+                        <MudText Typo="Typo.body1">@LM.Vesselcall:</MudText>
                     </MudItem>
                     <MudItem xs="8" sm="9">
                         <MudText Typo="Typo.body1" Class="ff-mono">
@@ -119,7 +122,7 @@
                     </MudItem>
 
                     <MudItem xs="4" sm="3">
-                        <MudText Typo="Typo.body1">Коносамент:</MudText>
+                        <MudText Typo="Typo.body1">@LM.BLNumber:</MudText>
                     </MudItem>
                     <MudItem xs="8" sm="9">
                         <MudText Typo="Typo.body1" Class="ff-mono">
@@ -128,7 +131,7 @@
                     </MudItem>
 
                     <MudItem xs="4" sm="3">
-                        <MudText Typo="Typo.body1">Обработка начата:</MudText>
+                        <MudText Typo="Typo.body1">@LM.HandlingStarted:</MudText>
                     </MudItem>
                     <MudItem xs="8" sm="9">
                         <MudText Typo="Typo.body1" Class="ff-mono">
@@ -137,7 +140,7 @@
                     </MudItem>
 
                     <MudItem xs="4" sm="3">
-                        <MudText Typo="Typo.body1">Обработка завершена:</MudText>
+                        <MudText Typo="Typo.body1">@LM.HandlingFinished:</MudText>
                     </MudItem>
                     <MudItem xs="8" sm="9">
                         <MudText Typo="Typo.body1" Class="ff-mono">
@@ -149,7 +152,7 @@
 
                 <MudDivider Class="my-4" />
 
-                <MudText Typo="Typo.h6" Class="mb-4">История перемещений</MudText>
+                <MudText Typo="Typo.h6" Class="mb-4">@LM.HandlingEvents</MudText>
 
                 @if (_eventsCount > 5)
                 {
@@ -203,7 +206,7 @@
     {
         <MudGrid Spacing="2">
             <MudItem xs="8">
-                <MudText Typo="Typo.h6" Class="mt-n1">@handlingEvent.TypeRu</MudText>
+                <MudText Typo="Typo.h6" Class="mt-n1">@LSM[handlingEvent.Type.ToString()]</MudText>
                 <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
                     <MudIcon Icon="@HandlingEventIcon(handlingEvent)" Color="Color.Primary" />
                     <MudText Typo="Typo.body2" Class="mud-text-secondary">
@@ -218,7 +221,7 @@
                         <MudText Typo="Typo.body2"> @($"{handlingEvent.Timestamp:HH:mm}")</MudText>
                     </MudStack>
                     <MudText Typo="Typo.body2" Class="mud-text-secondary">
-                        Кол-во: @handlingEvent.Quantity
+                        @($"{LM.Qty}: {handlingEvent.Quantity}")
                     </MudText>
                 </MudStack>
             </MudItem>

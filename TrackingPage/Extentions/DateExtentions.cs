@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace UTrack;
+namespace TrackingPage.Extentions;
 
 public static partial class DateExtentions
 {

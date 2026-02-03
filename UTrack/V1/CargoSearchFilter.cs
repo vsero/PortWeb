@@ -1,14 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace UTrack.V1;
-
-public enum CargoFlow
-{
-    [EnumMember(Value = "from_sea")]
-    FromSea,
-    [EnumMember(Value = "from_land")]
-    FromLand
-}
+﻿namespace UTrack.V1;
 
 public class CargoSearchFilter
 {
