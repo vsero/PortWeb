@@ -117,67 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+  <data name="Search" xml:space="preserve">
+    <value>Найти</value>
   </data>
-  <data name="GateIn" xml:space="preserve">
-    <value>Gate-in</value>
+  <data name="ShipmentTracking" xml:space="preserve">
+    <value>Отслеживание груза</value>
   </data>
-  <data name="Unloading" xml:space="preserve">
-    <value>Unloading</value>
+  <data name="Label_Search" xml:space="preserve">
+    <value>Номер контейнера, маркировка, коносамент</value>
   </data>
-  <data name="GateOut" xml:space="preserve">
-    <value>Gate-out</value>
+  <data name="Hide" xml:space="preserve">
+    <value>Скрыть</value>
   </data>
-  <data name="YardIn" xml:space="preserve">
-    <value>Yard-in</value>
-  </data>
-  <data name="YardOut" xml:space="preserve">
-    <value>Yard-out</value>
-  </data>
-  <data name="Qty" xml:space="preserve">
-    <value>Qty</value>
-  </data>
-  <data name="asof" xml:space="preserve">
-    <value>as of</value>
-  </data>
-  <data name="Laden" xml:space="preserve">
-    <value>Laden</value>
-  </data>
-  <data name="Empty" xml:space="preserve">
-    <value>Empty</value>
-  </data>
-  <data name="Container" xml:space="preserve">
-    <value>Container</value>
-  </data>
-  <data name="FromSea" xml:space="preserve">
-    <value>From sea</value>
-  </data>
-  <data name="FromLand" xml:space="preserve">
-    <value>From land</value>
-  </data>
-  <data name="Vesselcall" xml:space="preserve">
-    <value>Vesselcall</value>
-  </data>
-  <data name="DateFormat" xml:space="preserve">
-    <value>MM/dd/yyyy</value>
-  </data>
-  <data name="DateTimeFormat" xml:space="preserve">
-    <value>MM/dd/yyyy HH:mm</value>
-  </data>
-  <data name="TimeFormat" xml:space="preserve">
-    <value>HH:mm</value>
-  </data>
-  <data name="BLNumber" xml:space="preserve">
-    <value>BL number</value>
-  </data>
-  <data name="HandlingStarted" xml:space="preserve">
-    <value>Handling started</value>
-  </data>
-  <data name="HandlingFinished" xml:space="preserve">
-    <value>Handling finished</value>
-  </data>
-  <data name="HandlingEvents" xml:space="preserve">
-    <value>Handling events</value>
+  <data name="Expand" xml:space="preserve">
+    <value>Показать еще</value>
   </data>
 </root>

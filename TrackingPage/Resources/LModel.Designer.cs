@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UTrack.Resources {
+namespace TrackingPage.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace UTrack.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Locale {
+    public class LModel {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Locale() {
+        internal LModel() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace UTrack.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UTrack.Resources.Locale", typeof(Locale).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TrackingPage.Resources.LModel", typeof(LModel).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -75,6 +75,15 @@ namespace UTrack.Resources {
         public static string BLNumber {
             get {
                 return ResourceManager.GetString("BLNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Cargo flow.
+        /// </summary>
+        public static string CargoFlow {
+            get {
+                return ResourceManager.GetString("CargoFlow", resourceCulture);
             }
         }
         

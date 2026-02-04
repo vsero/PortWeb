@@ -17,7 +17,7 @@ public class CargoHandlingEventLocation
         { Vessel: not null } => Vessel.Title,
         { Yard: not null } => Yard.Title,
         { Gate: not null } => Gate.Title,
-        _ => "<Неизвестный тип локации>"
+        _ => "<Unknown location type>"
     };
 
 }

@@ -3,22 +3,23 @@
 @using Microsoft.Extensions.Localization
 @using UTrack
 @using UTrack.V1
-@using LM = UTrack.Resources.Locale
+@using LM = TrackingPage.Resources.LModel
+@using LP = TrackingPage.Resources.LTracking
 @inject ApiClient Api
 @inject IBrowserViewportService ViewportService
-@inject IStringLocalizer<UTrack.Resources.Locale> LSM
+@inject IStringLocalizer<TrackingPage.Resources.LModel> LMs
 
 <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5 mb-5">
 
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Отслеживание груза</MudText>
+        <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@LP.ShipmentTracking</MudText>
     </MudHidden>
 
     <MudPaper Elevation="4" Class="pa-4">
 
         <MudStack Row="true" AlignItems="AlignItems.Center">
             <MudTextField @bind-Value="_filter.SearchString"
-                          Label="Номер контейнера, маркировка, коносамент"
+                          Label=@LP.Label_Search
                           Variant="Variant.Outlined"
                           Clearable="true"
                           OnKeyDown="@(e => e.Key == "Enter" ? HandleSearch() : Task.CompletedTask)" />
@@ -35,7 +36,7 @@
                 else
                 {
 
-                    <MudText>Найти</MudText>
+                    <MudText>@LP.Search</MudText>
                 }
             </MudButton>
         </MudStack>
@@ -44,7 +45,7 @@
 
             <div style="width: 150px;">
                 <MudSelect T="CargoFlow"
-                           Label="Направление"
+                           Label=@LM.CargoFlow
                            @bind-Value="_filter.CargoFlow"
                            Variant="Variant.Outlined"
                            Dense="true"
@@ -162,7 +163,7 @@
                                    Color="Color.Primary"
                                    Class="w-100"
                                    StartIcon="@(_isExpanded ? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)">
-                            @(_isExpanded ? "Скрыть" : $"Показать еще ({_eventsCount - 5})")
+                            @(_isExpanded ? LP.Hide : $"{LP.Expand} ({_eventsCount - 5})")
                         </MudButton>
                     </MudStack>
                 }
@@ -206,7 +207,7 @@
     {
         <MudGrid Spacing="2">
             <MudItem xs="8">
-                <MudText Typo="Typo.h6" Class="mt-n1">@LSM[handlingEvent.Type.ToString()]</MudText>
+                <MudText Typo="Typo.h6" Class="mt-n1">@LMs[handlingEvent.Type.ToString()]</MudText>
                 <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
                     <MudIcon Icon="@HandlingEventIcon(handlingEvent)" Color="Color.Primary" />
                     <MudText Typo="Typo.body2" Class="mud-text-secondary">
@@ -217,8 +218,8 @@
             <MudItem xs="4">
                 <MudStack AlignItems="AlignItems.End" Spacing="0" Class="mt-1">
                     <MudStack Row="true" Wrap="Wrap.Wrap" Justify="Justify.FlexEnd" Spacing="2">
-                        <MudText Typo="Typo.body2">@($"{handlingEvent.Timestamp:dd.MM.yyyy}")</MudText>
-                        <MudText Typo="Typo.body2"> @($"{handlingEvent.Timestamp:HH:mm}")</MudText>
+                        <MudText Typo="Typo.body2">@($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.DateFormat)}")</MudText>
+                        <MudText Typo="Typo.body2"> @($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.TimeFormat)}")</MudText>
                     </MudStack>
                     <MudText Typo="Typo.body2" Class="mud-text-secondary">
                         @($"{LM.Qty}: {handlingEvent.Quantity}")

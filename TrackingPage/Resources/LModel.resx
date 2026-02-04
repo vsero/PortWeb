@@ -118,66 +118,69 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Loading" xml:space="preserve">
-    <value>Погрузка</value>
+    <value>Loading</value>
   </data>
   <data name="GateIn" xml:space="preserve">
-    <value>Завоз через КПП</value>
+    <value>Gate-in</value>
   </data>
   <data name="Unloading" xml:space="preserve">
-    <value>Выгрузка</value>
+    <value>Unloading</value>
   </data>
   <data name="GateOut" xml:space="preserve">
-    <value>Вывоз через КПП</value>
+    <value>Gate-out</value>
   </data>
   <data name="YardIn" xml:space="preserve">
-    <value>Помещен на хранение</value>
+    <value>Yard-in</value>
   </data>
   <data name="YardOut" xml:space="preserve">
-    <value>Снят с хранения</value>
+    <value>Yard-out</value>
   </data>
   <data name="Qty" xml:space="preserve">
-    <value>Кол-во</value>
+    <value>Qty</value>
   </data>
   <data name="asof" xml:space="preserve">
-    <value>от</value>
+    <value>as of</value>
   </data>
   <data name="Laden" xml:space="preserve">
-    <value>Груженый</value>
+    <value>Laden</value>
   </data>
   <data name="Empty" xml:space="preserve">
-    <value>Порожний</value>
+    <value>Empty</value>
   </data>
   <data name="Container" xml:space="preserve">
-    <value>Контейнер</value>
+    <value>Container</value>
   </data>
   <data name="FromSea" xml:space="preserve">
-    <value>С моря</value>
+    <value>From sea</value>
   </data>
   <data name="FromLand" xml:space="preserve">
-    <value>С суши</value>
+    <value>From land</value>
   </data>
   <data name="Vesselcall" xml:space="preserve">
-    <value>Судозаход</value>
+    <value>Vesselcall</value>
   </data>
   <data name="DateFormat" xml:space="preserve">
-    <value>dd.MM.yyyy</value>
+    <value>MM/dd/yyyy</value>
   </data>
   <data name="DateTimeFormat" xml:space="preserve">
-    <value>dd.MM.yyyy HH:mm</value>
+    <value>MM/dd/yyyy HH:mm</value>
   </data>
   <data name="TimeFormat" xml:space="preserve">
     <value>HH:mm</value>
   </data>
   <data name="BLNumber" xml:space="preserve">
-    <value>Коносамент</value>
+    <value>BL number</value>
   </data>
   <data name="HandlingStarted" xml:space="preserve">
-    <value>Обработка начата</value>
+    <value>Handling started</value>
   </data>
   <data name="HandlingFinished" xml:space="preserve">
-    <value>Обработка завершена</value>
+    <value>Handling finished</value>
   </data>
   <data name="HandlingEvents" xml:space="preserve">
-    <value>События обработки</value>
+    <value>Handling events</value>
+  </data>
+  <data name="CargoFlow" xml:space="preserve">
+    <value>Cargo flow</value>
   </data>
 </root>
