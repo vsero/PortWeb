@@ -99,7 +99,16 @@
         <span class="dismiss">🗙</span>
     </div>
 
-    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js" autostart="false"></script>
+    <script>
+        (function () {
+            const culture = localStorage.getItem('selectedCulture') || 'ru-RU';
+            window.Blazor.start({
+                // установка сохраненной культуры
+                applicationCulture: culture
+            });
+        })();
+    </script>
 
 </body>
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
+using MudBlazor;
 using MudBlazor.Services;
 using System.Globalization;
 using System.Text.Json;
@@ -43,12 +44,7 @@ static async Task SetupUserContext(WebAssemblyHost host)
     var userContext = host.Services.GetRequiredService<UserContext>();
 
     // Culture
-    var savedCulture = await js.InvokeAsync<string>("localStorage.getItem", "selectedCulture");
-    var cultureName = savedCulture ?? "ru-RU";
-    userContext.Culture = cultureName;
-    var cultureInfo = new CultureInfo(cultureName);
-    CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-    CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+    userContext.Culture = CultureInfo.CurrentCulture.Name;
 
     // Telegram
     try
@@ -74,4 +70,5 @@ static async Task SetupUserContext(WebAssemblyHost host)
     {
         Console.WriteLine($"Ошибка Telegram SDK: {ex.Message}");
     }
+
 }
