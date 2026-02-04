@@ -137,7 +137,7 @@
                     </MudItem>
                     <MudItem xs="8" sm="9">
                         <MudText Typo="Typo.body1" Class="ff-mono">
-                            <b>@_track.IsStartedTimestamp.ToStringOrEmpty()</b>
+                            <b>@_track.IsStartedTimestamp.ToStringOrEmpty(LM.DateTimeFormat)</b>
                         </MudText>
                     </MudItem>
 
@@ -146,7 +146,7 @@
                     </MudItem>
                     <MudItem xs="8" sm="9">
                         <MudText Typo="Typo.body1" Class="ff-mono">
-                            <b>@_track.IsFinishedTimestamp.ToStringOrEmpty()</b>
+                            <b>@_track.IsFinishedTimestamp.ToStringOrEmpty(LM.DateFormat)</b>
                         </MudText>
                     </MudItem>
 

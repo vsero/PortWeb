@@ -142,7 +142,7 @@
     <value>Начало погрузки</value>
   </data>
   <data name="Departure" xml:space="preserve">
-    <value>Оотход</value>
+    <value>Отход</value>
   </data>
   <data name="Discharged_Cargo" xml:space="preserve">
     <value>Выгружено</value>
