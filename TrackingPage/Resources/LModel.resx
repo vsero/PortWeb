@@ -138,8 +138,8 @@
   <data name="Qty" xml:space="preserve">
     <value>Qty</value>
   </data>
-  <data name="asof" xml:space="preserve">
-    <value>as of</value>
+  <data name="Declared" xml:space="preserve">
+    <value>Declared</value>
   </data>
   <data name="Laden" xml:space="preserve">
     <value>Laden</value>
@@ -165,6 +165,9 @@
   <data name="DateTimeFormat" xml:space="preserve">
     <value>MM/dd/yyyy HH:mm</value>
   </data>
+  <data name="DateTimeShortFormat" xml:space="preserve">
+    <value>MM/dd/yy HH:mm</value>
+  </data>
   <data name="TimeFormat" xml:space="preserve">
     <value>HH:mm</value>
   </data>
@@ -182,5 +185,11 @@
   </data>
   <data name="CargoFlow" xml:space="preserve">
     <value>Cargo flow</value>
+  </data>
+  <data name="TotalQty" xml:space="preserve">
+    <value>Total qty</value>
+  </data>
+  <data name="Expected" xml:space="preserve">
+    <value>Expected</value>
   </data>
 </root>

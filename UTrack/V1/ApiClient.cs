@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace UTrack.V1;
+
 public class ApiClient(HttpClient httpClient, string xApiKey)
 {
     public async Task<(IEnumerable<VesselCall>? vesselCalls, string error)> VesselCallListAsync(
@@ -11,7 +12,7 @@ public class ApiClient(HttpClient httpClient, string xApiKey)
     {
         try
         {
-            
+
             var request = new HttpRequestMessage(HttpMethod.Get, "vesselcall/list");
             request.Headers.Add("x-api-key", xApiKey);
             using var response = await httpClient.SendAsync(request, cancellationToken);
@@ -67,21 +68,51 @@ public class ApiClient(HttpClient httpClient, string xApiKey)
         }
     }
 
+
+    public async Task<(IEnumerable<CargoShipment>? cargoShipments, string error)> NotifyShipmentGET(TgUser tgUser, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var xTguser = JsonSerializer.Serialize(tgUser, _jsonOptions);
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"notify/shipment");
+            request.Headers.Add("x-tguser", xTguser);
+            using var response = await httpClient.SendAsync(request, cancellationToken);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var items = await response.Content.ReadFromJsonAsync<IEnumerable<CargoShipment>>(_jsonOptions, cancellationToken);
+                return (items, string.Empty);
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                return (null, string.Empty);
+            }
+
+            var errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
+            return (null, $"There is some problem occurred: {response.StatusCode}, Content: {errorContent}");
+
+        }
+        catch (OperationCanceledException)
+        {
+            return (null, "Request was canceled");
+        }
+        catch (Exception ex)
+        {
+            return (null, $"Unexpected error: {ex.Message}");
+        }
+    }
+
+
     #region Private helpers
 
-    private async Task<(CargoShipment? track, string error)> SendAndProcess(
-        CargoSearchFilter filter,
-        string searchBy,
-        CancellationToken cancellationToken)
+    private async Task<(CargoShipment? track, string error)> SendAndProcess(CargoSearchFilter filter, string searchBy, CancellationToken cancellationToken)
     {
         using var request = await CreateRequest(filter, searchBy);
         using var response = await httpClient.SendAsync(request, cancellationToken);
         return await ProcessResult(response, cancellationToken);
     }
 
-    private async Task<HttpRequestMessage> CreateRequest(
-        CargoSearchFilter filter,
-        string searchBy = "label")
+    private async Task<HttpRequestMessage> CreateRequest(CargoSearchFilter filter, string searchBy = "label") 
     {
         var queryParams = new Dictionary<string, string?>
         {
@@ -109,9 +140,7 @@ public class ApiClient(HttpClient httpClient, string xApiKey)
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower) }
     };
 
-    private static async Task<(CargoShipment? track, string error)> ProcessResult(
-        HttpResponseMessage response,
-        CancellationToken cancellationToken)
+    private static async Task<(CargoShipment? track, string error)> ProcessResult(HttpResponseMessage response, CancellationToken cancellationToken)
     {
         if (response.StatusCode == HttpStatusCode.OK)
         {
@@ -138,6 +167,6 @@ public static class EnumExtensions
 {
     public static string ToSnakeCase(this Enum value)
     {
-        return System.Text.Json.JsonNamingPolicy.SnakeCaseLower.ConvertName(value.ToString());
+        return JsonNamingPolicy.SnakeCaseLower.ConvertName(value.ToString());
     }
 }

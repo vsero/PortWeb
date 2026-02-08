@@ -1,0 +1,245 @@
+﻿@using Microsoft.Extensions.Localization
+@using UTrack.V1
+@using LM = TrackingPage.Resources.LModel
+@using LP = TrackingPage.Resources.LTracking
+@inject IStringLocalizer<TrackingPage.Resources.LModel> LMs
+
+
+@if (Shipment is not null)
+{
+    <MudCard Class="mt-6" Elevation="4">
+
+        <MudCardHeader>
+            <CardHeaderContent>
+
+                <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" Class="w-100">
+
+                    @if (_cardExpanded)
+                    {
+                        <MudText Typo="Typo.subtitle1" Class="flex-grow-1 text-truncate">
+                            @Shipment.Title
+                        </MudText>
+                    }
+                    else
+                    {
+                        <MudStack Spacing="1">
+                            <MudText Typo="Typo.subtitle1" Class="flex-grow-1 text-truncate" Style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
+                                @Shipment.Title
+                            </MudText>
+                            <MudText Typo="Typo.body1">@Shipment.VesselCallTitle</MudText>
+                        </MudStack>
+                    }
+
+                    <MudSpacer />
+
+                    <MudStack Spacing="0" AlignItems="AlignItems.End" AlignSelf="AlignSelf.Start" Class="flex-none">
+                        <MudChip T="string"
+                                 Color="@(ShipmentChipColor())"
+                                 Variant="Variant.Outlined"
+                                 Size="Size.Medium"
+                                 Class="ma-0 mb-2">
+                            @LMs[_lastEvent?.Type.ToString() ?? LM.Expected]
+                        </MudChip>
+
+                        <MudText Typo="Typo.body2" Class="mud-text-secondary px-2">
+                            @Shipment.HandlingEvents.Last().Timestamp.ToStringOrEmpty(LM.DateTimeShortFormat)
+                        </MudText>
+                    </MudStack>
+
+                    @if (_cardIsExpandable)
+                    {
+                        <MudIconButton OnClick="ToggleCardExpand" Icon="@(_cardExpanded? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)" />
+                    }
+
+                </MudStack>
+
+            </CardHeaderContent>
+        </MudCardHeader>
+
+        <MudCollapse Expanded="_cardExpanded">
+            <MudCardContent>
+
+                <MudGrid Spacing="1" Class="mt-2">
+                    @ShipmentPropery(LM.Vesselcall, Shipment.VesselCallTitle)
+                    @ShipmentPropery(LM.BLNumber, Shipment.BlNumber)
+                    @ShipmentPropery(LM.TotalQty, Shipment.TotalQuantity.ToString())
+                    @ShipmentPropery(LM.Declared, Shipment.DeclaredTimestamp.ToStringOrEmpty(LM.DateFormat))
+                    @ShipmentPropery(LM.HandlingStarted, Shipment.IsStartedTimestamp.ToStringOrEmpty(LM.DateTimeFormat))
+                    @ShipmentPropery(LM.HandlingFinished, Shipment.IsFinishedTimestamp.ToStringOrEmpty(LM.DateTimeFormat))
+                </MudGrid>
+
+                <MudDivider Class="my-4" />
+
+                <MudText Typo="Typo.h6" Class="mb-4">@LM.HandlingEvents</MudText>
+
+                @if (_eventsCount > _maxVisibleEvents)
+                {
+                    <MudStack Stretch="Stretch.Always">
+                        <MudButton OnClick="ToggleEventsExpand"
+                                   Variant="Variant.Text"
+                                   Color="Color.Default"
+                                   Class="w-100"
+                                   StartIcon="@(_eventsExpanded ? Icons.Material.Filled.ExpandLess: Icons.Material.Filled.ExpandMore)">
+                            @(_eventsExpanded? LP.Hide: $"{LP.Expand} ({_eventsCount - _maxVisibleEvents})")
+                        </MudButton>
+                    </MudStack>
+                }
+
+                <MudHidden Breakpoint="Breakpoint.MdAndUp">
+                    <MudStack Spacing="2">
+                        @foreach (var handlingEvent in _visibleEvents)
+                        {
+                            @EventCard(handlingEvent)
+                            <MudDivider />
+                        }
+                    </MudStack>
+                </MudHidden>
+
+                <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                    <MudTimeline TimelinePosition="TimelinePosition.Start"
+                                 TimelineOrientation="TimelineOrientation.Vertical">
+
+                        @foreach (var handlingEvent in _visibleEvents)
+                        {
+                            <MudTimelineItem Color="Color.Primary" Variant="Variant.Outlined">
+                                <ItemContent>
+                                    @EventCard(handlingEvent)
+                                </ItemContent>
+                            </MudTimelineItem>
+                        }
+                    </MudTimeline>
+                </MudHidden>
+
+            </MudCardContent>
+        </MudCollapse>
+    </MudCard>
+}
+
+
+
+@code {
+
+    [Parameter] public CargoShipment? Shipment { get; set; }
+    [Parameter] public bool IsExpandable { get; set; }
+
+    private IEnumerable<CargoHandlingEvent> _visibleEvents = [];
+    private int _eventsCount = 0;
+    private int _maxVisibleEvents = 5;
+    private bool _eventsExpanded;
+    private bool _cardExpanded;
+    private bool _cardIsExpandable;
+    private CargoHandlingEvent? _lastEvent;
+
+
+
+    RenderFragment ShipmentPropery(string label, string value) =>
+    @<text>
+        <MudItem xs="4" sm="3">
+            <MudText Typo="Typo.body1">@label:</MudText>
+        </MudItem>
+        <MudItem xs="8" sm="9">
+            <MudText Typo="Typo.body1" Class="ff-mono">
+                <b>@value</b>
+            </MudText>
+        </MudItem>
+    </text>;
+
+
+
+    RenderFragment EventCard(CargoHandlingEvent handlingEvent) =>
+    @<MudGrid Spacing="2">
+    <MudItem xs="8">
+        <MudText Typo="Typo.h6" Class="mt-n1">@LMs[handlingEvent.Type.ToString()]</MudText>
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+            <MudIcon Icon="@HandlingEventIcon(handlingEvent)" Color="Color.Primary" />
+            <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                @handlingEvent.Location.Title
+            </MudText>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="4">
+        <MudStack AlignItems="AlignItems.End" Spacing="0" Class="mt-1">
+            <MudStack Row="true" Wrap="Wrap.Wrap" Justify="Justify.FlexEnd" Spacing="2">
+                <MudText Typo="Typo.body2">@($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.DateFormat)}")</MudText>
+                <MudText Typo="Typo.body2"> @($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.TimeFormat)}")</MudText>
+            </MudStack>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                @($"{LM.Qty}: {handlingEvent.Quantity}")
+            </MudText>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+    ;
+
+
+
+
+    protected override void OnParametersSet()
+    {
+        _cardIsExpandable = IsExpandable;
+        _cardExpanded = !_cardIsExpandable;
+        if (Shipment != null)
+        {
+            SetShipmentVariables();
+        }
+    }
+
+
+
+    private void ToggleCardExpand()
+    {
+        _cardExpanded = !_cardExpanded;
+    }
+
+
+
+    private void ToggleEventsExpand()
+    {
+        _eventsExpanded = !_eventsExpanded;
+        SetShipmentVariables();
+    }
+
+
+
+    private void SetShipmentVariables()
+    {
+        if (Shipment is not null)
+        {
+            _visibleEvents = _eventsExpanded ? Shipment.HandlingEvents : Shipment.HandlingEvents.TakeLast(5);
+            _eventsCount = Shipment.HandlingEvents.Count();
+            _lastEvent = Shipment.HandlingEvents.Last();
+        }
+    }
+
+
+
+    private string HandlingEventIcon(CargoHandlingEvent ev) => ev switch
+    {
+        { Location.Vehicle: not null } => Icons.Material.Filled.LocalShipping,
+        { Location.Vessel: not null } => Icons.Material.Filled.DirectionsBoat,
+        { Location.Yard: not null } => Icons.Material.Filled.Warehouse,
+        { Location.Gate: not null } => Icons.Material.Filled.MeetingRoom,
+        _ => Icons.Material.Filled.HelpOutline
+    };
+
+
+
+    private Color ShipmentChipColor()
+    {
+        if (_lastEvent is not null)
+        {
+            return _lastEvent.Type switch
+            {
+                CargoHandlingEventType.GateIn => Color.Warning,
+                CargoHandlingEventType.GateOut => Color.Success,
+                CargoHandlingEventType.YardIn => Color.Warning,
+                CargoHandlingEventType.YardOut => Color.Success,
+                CargoHandlingEventType.Loading => Color.Success,
+                CargoHandlingEventType.Unloading => Color.Warning,
+                _ => Color.Default
+            };
+        }
+        return Color.Default;
+    }
+
+}

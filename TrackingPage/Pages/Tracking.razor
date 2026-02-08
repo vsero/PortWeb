@@ -3,12 +3,14 @@
 @using Microsoft.Extensions.Localization
 @using UTrack
 @using UTrack.V1
+@using TrackingPage.Components
 @using LM = TrackingPage.Resources.LModel
 @using LP = TrackingPage.Resources.LTracking
 @inject ApiClient Api
 @inject UserContext UserContext
 @inject IBrowserViewportService ViewportService
 @inject IStringLocalizer<TrackingPage.Resources.LModel> LMs
+
 
 <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5 mb-5">
 
@@ -80,178 +82,21 @@
         <MudAlert Severity="Severity.Error" Class="mt-4">@_errorMessage</MudAlert>
     }
 
-    @if (_track != null)
-    {
-        <MudCard Class="mt-6" Elevation="4">
+    <ShipmentCard Shipment="_shipment" IsExpandable="false" />
 
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudStack Row="true" AlignItems="AlignItems.Start" Justify="Justify.SpaceBetween" Class="w-100">
-
-                        <MudText Typo="Typo.h5" Class="flex-grow-1 text-truncate">
-                            @_track.Title
-                        </MudText>
-
-                        <MudStack Spacing="0" AlignItems="AlignItems.End" AlignSelf="AlignSelf.Start" Class="flex-none">
-                            <MudChip T="string"
-                                     Color="Color.Info"
-                                     Variant="Variant.Text"
-                                     Size="Size.Small"
-                                     Class="ma-0">
-                                @($"{LM.asof} {_track.DeclaredTimestamp.ToStringOrEmpty(LM.DateFormat)}")
-                            </MudChip>
-
-                            <MudText Typo="Typo.body2" Class="mud-text-secondary px-2">
-                                @($"{LM.Qty}: {_track.TotalQuantity}")
-                            </MudText>
-                        </MudStack>
-
-                    </MudStack>
-                </CardHeaderContent>
-            </MudCardHeader>
-
-            <MudCardContent>
-
-                <MudGrid Spacing="1" Class="mt-2">
-
-                    <MudItem xs="4" sm="3">
-                        <MudText Typo="Typo.body1">@LM.Vesselcall:</MudText>
-                    </MudItem>
-                    <MudItem xs="8" sm="9">
-                        <MudText Typo="Typo.body1" Class="ff-mono">
-                            <b>@_track.VesselCallTitle</b>
-                        </MudText>
-                    </MudItem>
-
-                    <MudItem xs="4" sm="3">
-                        <MudText Typo="Typo.body1">@LM.BLNumber:</MudText>
-                    </MudItem>
-                    <MudItem xs="8" sm="9">
-                        <MudText Typo="Typo.body1" Class="ff-mono">
-                            <b>@_track.BlNumber</b>
-                        </MudText>
-                    </MudItem>
-
-                    <MudItem xs="4" sm="3">
-                        <MudText Typo="Typo.body1">@LM.HandlingStarted:</MudText>
-                    </MudItem>
-                    <MudItem xs="8" sm="9">
-                        <MudText Typo="Typo.body1" Class="ff-mono">
-                            <b>@_track.IsStartedTimestamp.ToStringOrEmpty(LM.DateTimeFormat)</b>
-                        </MudText>
-                    </MudItem>
-
-                    <MudItem xs="4" sm="3">
-                        <MudText Typo="Typo.body1">@LM.HandlingFinished:</MudText>
-                    </MudItem>
-                    <MudItem xs="8" sm="9">
-                        <MudText Typo="Typo.body1" Class="ff-mono">
-                            <b>@_track.IsFinishedTimestamp.ToStringOrEmpty(LM.DateFormat)</b>
-                        </MudText>
-                    </MudItem>
-
-                </MudGrid>
-
-                <MudDivider Class="my-4" />
-
-                <MudText Typo="Typo.h6" Class="mb-4">@LM.HandlingEvents</MudText>
-
-                @if (_eventsCount > 5)
-                {
-                    <MudStack Stretch="Stretch.Always">
-                        <MudButton OnClick="ToggleTimeline"
-                                   Variant="Variant.Text"
-                                   Color="Color.Primary"
-                                   Class="w-100"
-                                   StartIcon="@(_isExpanded ? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)">
-                            @(_isExpanded ? LP.Hide : $"{LP.Expand} ({_eventsCount - 5})")
-                        </MudButton>
-                    </MudStack>
-                }
-
-                @if (UserContext.IsMobile)
-                {
-                    <MudStack Spacing="2">
-                        @foreach (var handlingEvent in _visibleEvents)
-                        {
-                            @EventCard(handlingEvent)
-                            <MudDivider />
-                        }
-                    </MudStack>
-                }
-                else
-                {
-                    <MudTimeline TimelinePosition="TimelinePosition.Start"
-                                 TimelineOrientation="TimelineOrientation.Vertical">
-
-                        @foreach (var handlingEvent in _visibleEvents)
-                        {
-                            <MudTimelineItem Color="Color.Primary" Variant="Variant.Outlined">
-                                <ItemContent>
-                                    @EventCard(handlingEvent)
-                                </ItemContent>
-                            </MudTimelineItem>
-                        }
-                    </MudTimeline>
-                }
-
-            </MudCardContent>
-        </MudCard>
-    }
 </MudContainer>
+
+
+
     
 @code {
 
-    #region RenderFragments
-
-    private RenderFragment<CargoHandlingEvent> EventCard => (handlingEvent) => __builder =>
-    {
-        <MudGrid Spacing="2">
-            <MudItem xs="8">
-                <MudText Typo="Typo.h6" Class="mt-n1">@LMs[handlingEvent.Type.ToString()]</MudText>
-                <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                    <MudIcon Icon="@HandlingEventIcon(handlingEvent)" Color="Color.Primary" />
-                    <MudText Typo="Typo.body2" Class="mud-text-secondary">
-                        @handlingEvent.Location.Title
-                    </MudText>
-                </MudStack>
-            </MudItem>
-            <MudItem xs="4">
-                <MudStack AlignItems="AlignItems.End" Spacing="0" Class="mt-1">
-                    <MudStack Row="true" Wrap="Wrap.Wrap" Justify="Justify.FlexEnd" Spacing="2">
-                        <MudText Typo="Typo.body2">@($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.DateFormat)}")</MudText>
-                        <MudText Typo="Typo.body2"> @($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.TimeFormat)}")</MudText>
-                    </MudStack>
-                    <MudText Typo="Typo.body2" Class="mud-text-secondary">
-                        @($"{LM.Qty}: {handlingEvent.Quantity}")
-                    </MudText>
-                </MudStack>
-            </MudItem>
-        </MudGrid>
-    };
-
-    #endregion
-
     private bool _isLoading;
-    private bool _isExpanded;
-    private int _eventsCount;
     private string? _errorMessage;
     private CargoSearchFilter _filter = new();
-    private CargoShipment? _track;
+    private CargoShipment? _shipment;
     private CancellationTokenSource? _cts;
-    private IEnumerable<CargoHandlingEvent> _visibleEvents = [];
 
-    private void ToggleTimeline()
-    {
-        _isExpanded = !_isExpanded;
-        SetVisibleElements();
-    }
-
-    private void SetVisibleElements()
-    {
-        if (_track is not null)
-            _visibleEvents = _isExpanded ? _track.HandlingEvents : _track.HandlingEvents.TakeLast(5);
-    }
 
     private async Task HandleSearch()
     {
@@ -263,31 +108,18 @@
         _cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         _isLoading = true;
         _errorMessage = null;
-        _track = null;
+        _shipment = null;
 
-        (CargoShipment? track, string error) = await Api.ShipmentSearchAsync(_filter, _cts.Token);
+        (CargoShipment? shipment, string error) = await Api.ShipmentSearchAsync(_filter, _cts.Token);
 
         _isLoading = false;
-        _track = track;
+        _shipment = shipment;
 
-        if (_track is null)
+        if (_shipment is null)
             _errorMessage = string.IsNullOrWhiteSpace(error) ? "Груз не найден" : error;
-        else
-        {
-            _eventsCount = _track.HandlingEvents.Count();
-            SetVisibleElements();
-        }
+
     }
 
-
-    private string HandlingEventIcon(CargoHandlingEvent ev) => ev switch
-    {
-        { Location.Vehicle: not null } => Icons.Material.Filled.LocalShipping,
-        { Location.Vessel: not null } => Icons.Material.Filled.DirectionsBoat,
-        { Location.Yard: not null } => Icons.Material.Filled.Warehouse,
-        { Location.Gate: not null } => Icons.Material.Filled.MeetingRoom,
-        _ => Icons.Material.Filled.HelpOutline
-    };
 
     public void Dispose()
     {

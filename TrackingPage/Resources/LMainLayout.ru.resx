@@ -126,4 +126,7 @@
   <data name="PageVessels" xml:space="preserve">
     <value>Суда</value>
   </data>
+  <data name="PageShipments" xml:space="preserve">
+    <value>Грузы</value>
+  </data>
 </root>

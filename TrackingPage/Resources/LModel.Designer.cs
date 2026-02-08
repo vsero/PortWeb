@@ -61,15 +61,6 @@ namespace TrackingPage.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на as of.
-        /// </summary>
-        public static string asof {
-            get {
-                return ResourceManager.GetString("asof", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Ищет локализованную строку, похожую на BL number.
         /// </summary>
         public static string BLNumber {
@@ -115,11 +106,38 @@ namespace TrackingPage.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на MM/dd/yy HH:mm.
+        /// </summary>
+        public static string DateTimeShortFormat {
+            get {
+                return ResourceManager.GetString("DateTimeShortFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Declared.
+        /// </summary>
+        public static string Declared {
+            get {
+                return ResourceManager.GetString("Declared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Empty.
         /// </summary>
         public static string Empty {
             get {
                 return ResourceManager.GetString("Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Expected.
+        /// </summary>
+        public static string Expected {
+            get {
+                return ResourceManager.GetString("Expected", resourceCulture);
             }
         }
         
@@ -219,6 +237,15 @@ namespace TrackingPage.Resources {
         public static string TimeFormat {
             get {
                 return ResourceManager.GetString("TimeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Total qty.
+        /// </summary>
+        public static string TotalQty {
+            get {
+                return ResourceManager.GetString("TotalQty", resourceCulture);
             }
         }
         

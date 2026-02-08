@@ -61,7 +61,7 @@ namespace TrackingPage.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Expande.
+        ///   Ищет локализованную строку, похожую на Show previous.
         /// </summary>
         public static string Expand {
             get {

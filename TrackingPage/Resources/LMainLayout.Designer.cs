@@ -70,6 +70,15 @@ namespace TrackingPage.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Shipments.
+        /// </summary>
+        public static string PageShipments {
+            get {
+                return ResourceManager.GetString("PageShipments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Tracking.
         /// </summary>
         public static string PageTracking {
