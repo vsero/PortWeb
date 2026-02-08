@@ -1,0 +1,127 @@
+﻿@page "/"
+@page "/tracking"
+@using Microsoft.Extensions.Localization
+@using Vsero.UTrcak
+@using Vsero.UTrcak.V1
+@using Vsero.PortTrack.Components
+@using LM = Vsero.PortTrack.Resources.LModel
+@using LP = Vsero.PortTrack.Resources.LTracking
+@inject ApiClient Api
+@inject UserContext UserContext
+@inject IBrowserViewportService ViewportService
+@inject IStringLocalizer<Vsero.PortTrack.Resources.LModel> LMs
+
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5 mb-5">
+
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@LP.ShipmentTracking</MudText>
+    </MudHidden>
+
+    <MudPaper Elevation="4" Class="pa-4">
+
+        <MudStack Row="true" AlignItems="AlignItems.Center">
+            <MudTextField @bind-Value="_filter.SearchString"
+                          Label=@LP.Label_Search
+                          Variant="Variant.Outlined"
+                          Clearable="true"
+                          OnKeyDown="@(e => e.Key == "Enter" ? HandleSearch() : Task.CompletedTask)" />
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Large"
+                       OnClick="HandleSearch"
+                       Class="ml-4"
+                       Disabled="_isLoading">
+                @if (_isLoading)
+                {
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+                }
+                else
+                {
+
+                    <MudText>@LP.Search</MudText>
+                }
+            </MudButton>
+        </MudStack>
+
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Class="mt-4" Spacing="4">
+
+            <div style="width: 150px;">
+                <MudSelect T="CargoFlow"
+                           Label=@LM.CargoFlow
+                           @bind-Value="_filter.CargoFlow"
+                           Variant="Variant.Outlined"
+                           Dense="true"
+                           Margin="Margin.Dense"
+                           Style="width: fit-content; max-width: 150px;">
+                    <MudSelectItem Value="CargoFlow.FromSea">@LM.FromSea</MudSelectItem>
+                    <MudSelectItem Value="CargoFlow.FromLand">@LM.FromLand</MudSelectItem>
+                </MudSelect>
+            </div>
+
+            <MudStack Row="true" Wrap="Wrap.Wrap" Spacing="2">
+                <MudCheckBox @bind-Value="_filter.IsContainerUnit"
+                             Label=@LM.Container
+                             Color="Color.Primary"
+                             Dense="true" />
+
+                <MudCheckBox @bind-Value="_filter.IsEmptyContainerUnit"
+                             Label=@LM.Empty
+                             Color="Color.Primary"
+                             Dense="true"
+                             Disabled="!_filter.IsContainerUnit" />
+            </MudStack>
+
+
+        </MudStack>
+
+    </MudPaper>
+
+    <ErrorAlertBar ErrorMessage="@_errorMessage" />
+
+    <ShipmentCard Shipment="_shipment" IsExpandable="false" />
+
+</MudContainer>
+
+
+
+    
+@code {
+
+    private bool _isLoading;
+    private string? _errorMessage;
+    private CargoSearchFilter _filter = new();
+    private CargoShipment? _shipment;
+    private CancellationTokenSource? _cts;
+
+
+    private async Task HandleSearch()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+
+        if (string.IsNullOrWhiteSpace(_filter.SearchString)) return;
+
+        _cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        _isLoading = true;
+        _errorMessage = null;
+        _shipment = null;
+
+        (CargoShipment? shipment, string error) = await Api.ShipmentSearchAsync(_filter, _cts.Token);
+
+        _isLoading = false;
+        _shipment = shipment;
+
+        if (_shipment is null)
+            _errorMessage = string.IsNullOrWhiteSpace(error) ? "Груз не найден" : error;
+
+    }
+
+
+    public void Dispose()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+    }
+
+}

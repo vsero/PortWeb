@@ -1,0 +1,84 @@
+﻿@page "/shipmentsList"
+@using Vsero.PortTrack.Components
+@using Vsero.UTrcak.V1
+@inject ApiClient Api
+@inject UserContext UserContext
+
+
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="pa-4">
+
+    <ErrorAlertBar ErrorMessage="@_errorMessage" />
+
+    <MudStack Spacing="1">
+        @foreach (var shipment in _shipments)
+        {
+            <ShipmentCard Shipment="shipment" IsExpandable="true" />
+        }
+    </MudStack>
+
+</MudContainer>
+
+
+
+
+@code {
+
+    private bool _isLoading;
+    private string _errorMessage = string.Empty;
+    private CancellationTokenSource? _cts;
+    private List<CargoShipment> _shipments = [];
+
+
+
+    protected override Task OnInitializedAsync()
+    {
+        _ = GetShipments();
+        return base.OnInitializedAsync();
+    }
+
+
+
+    private async Task GetShipments()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+
+        _cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        _isLoading = true;
+        _errorMessage = string.Empty;
+        _shipments.Clear();
+
+        IEnumerable<CargoShipment>? cargoShipments = null;
+        // Vsero.UTrcak.TgUser? apiTguser = UserContext.TgUser?.ToApiModel();
+
+        Vsero.UTrcak.TgUser? apiTguser = new()
+        {
+            Id = 412798134,
+            Username = "VitalySerokurov",
+            FirstName = "Vitaly"
+        };
+
+
+        if (apiTguser is not null)
+        {
+            (cargoShipments, _errorMessage) = await Api.NotifyShipmentGET(apiTguser, _cts.Token);
+        }
+
+        if (cargoShipments is not null)
+            _shipments = cargoShipments.ToList();
+
+        _isLoading = false;
+        StateHasChanged();
+
+    }
+
+
+
+    public void Dispose()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+    }
+
+}

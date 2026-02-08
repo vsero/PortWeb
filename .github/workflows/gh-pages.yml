@@ -28,7 +28,7 @@ jobs:
     - name: App Settings Variables
       uses: microsoft/variable-substitution@v1
       with:
-        files: './TrackingPage/wwwroot/appsettings.json'
+        files: './Vsero.PortTrack/wwwroot/appsettings.json'
       env:
         ApiSettings.XApiKey: ${{ secrets.API_KEY }}    
 
