@@ -120,8 +120,8 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
-  <data name="ShipmentTracking" xml:space="preserve">
-    <value>Shipment tracking</value>
+  <data name="PageShipmentSearchHeader" xml:space="preserve">
+    <value>Shipment search</value>
   </data>
   <data name="Label_Search" xml:space="preserve">
     <value>Container No, Label, BL number</value>

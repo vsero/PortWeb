@@ -80,22 +80,22 @@ public class UserContext
     
     public U.TgUser? ApiTguser()
     {
-        return new()
-        {
-            Id = 412798134,
-            Username = "VitalySerokurov",
-            FirstName = "Vitaly"
-        };
-
-        //if (TgUser is null)
-        //    return null;
-
-        //return new U.TgUser
+        //return new()
         //{
-        //    Id = TgUser.Id,
-        //    Username = TgUser.Username,
-        //    FirstName = TgUser.FirstName
+        //    Id = 412798134,
+        //    Username = "VitalySerokurov",
+        //    FirstName = "Vitaly"
         //};
+
+        if (TgUser is null)
+            return null;
+
+        return new U.TgUser
+        {
+            Id = TgUser.Id,
+            Username = TgUser.Username,
+            FirstName = TgUser.FirstName
+        };
     }
 
 

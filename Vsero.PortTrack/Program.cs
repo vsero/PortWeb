@@ -12,7 +12,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl2"]
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"]
                  ?? "https://kmtp.info/upapi/hs/UTrcakv1/";
 
 var xApiKey = builder.Configuration["ApiSettings:XApiKey"] ?? string.Empty;

@@ -120,8 +120,8 @@
   <data name="Search" xml:space="preserve">
     <value>Найти</value>
   </data>
-  <data name="ShipmentTracking" xml:space="preserve">
-    <value>Отслеживание груза</value>
+  <data name="PageShipmentSearchHeader" xml:space="preserve">
+    <value>Поиск груза</value>
   </data>
   <data name="Label_Search" xml:space="preserve">
     <value>Номер контейнера, маркировка, коносамент</value>

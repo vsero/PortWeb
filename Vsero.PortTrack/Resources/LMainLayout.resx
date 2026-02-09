@@ -120,13 +120,13 @@
   <data name="AppBarTitle" xml:space="preserve">
     <value>Korsakov Sea Commercial Port</value>
   </data>
-  <data name="PageTracking" xml:space="preserve">
-    <value>Tracking</value>
+  <data name="PageShipmentSearch" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="PageVessels" xml:space="preserve">
     <value>Vessels</value>
   </data>
-  <data name="PageShipments" xml:space="preserve">
-    <value>Shipments</value>
+  <data name="PageShipmentList" xml:space="preserve">
+    <value>List</value>
   </data>
 </root>

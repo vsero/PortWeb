@@ -16,7 +16,7 @@
 <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-5 mb-5">
 
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@LC.ShipmentTracking</MudText>
+        <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">@LC.PageShipmentSearchHeader</MudText>
     </MudHidden>
 
     <MudPaper Elevation="4" Class="pa-4">
@@ -83,13 +83,16 @@
     <ShipmentCard Shipment="@_shipment" IsExpandable="false">
         <CardActions>
             <MudSpacer />
-            @if (!_shipmentAdded)
+            @if (UserContext.IsTg)
             {
-                <ShipmentCardButton OnClick="ShipmentCard_Add" Kind="ShipmentCardButton.ButtonKind.Add"/>
-            }
-            else
-            {
-                <ShipmentCardButton OnClick="ShipmentCard_Delete" Kind="ShipmentCardButton.ButtonKind.Delete" />
+                @if (!_shipmentAdded)
+                {
+                    <ShipmentCardButton OnClick="ShipmentCard_Add" Kind="ShipmentCardButton.ButtonKind.Add"/>
+                }
+                else
+                {
+                    <ShipmentCardButton OnClick="ShipmentCard_Delete" Kind="ShipmentCardButton.ButtonKind.Delete" />
+                }
             }
         </CardActions>
     </ShipmentCard>

@@ -17,8 +17,11 @@
         {
             <ShipmentCard @key="shipment" Shipment="shipment" IsExpandable="true">
                 <CardActions>
-                    <MudSpacer />
-                    <ShipmentCardButton OnClick="@(() => ShipmentCard_Delete(shipment))" Kind="ShipmentCardButton.ButtonKind.Delete" />
+                    @if (UserContext.IsTg)
+                    {
+                        <MudSpacer />
+                        <ShipmentCardButton OnClick="@(() => ShipmentCard_Delete(shipment))" Kind="ShipmentCardButton.ButtonKind.Delete" />
+                    }
                 </CardActions>
             </ShipmentCard>
         }
@@ -68,7 +71,7 @@
 
 
     private async Task ShipmentCard_Delete(CargoShipment shipment)
-    { 
+    {
         bool result = false;
         var apiTguser = UserContext.ApiTguser();
         if (apiTguser is not null)

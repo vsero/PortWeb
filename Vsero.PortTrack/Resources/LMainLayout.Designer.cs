@@ -70,20 +70,20 @@ namespace Vsero.PortTrack.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Shipments.
+        ///   Ищет локализованную строку, похожую на List.
         /// </summary>
-        public static string PageShipments {
+        public static string PageShipmentList {
             get {
-                return ResourceManager.GetString("PageShipments", resourceCulture);
+                return ResourceManager.GetString("PageShipmentList", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Tracking.
+        ///   Ищет локализованную строку, похожую на Search.
         /// </summary>
-        public static string PageTracking {
+        public static string PageShipmentSearch {
             get {
-                return ResourceManager.GetString("PageTracking", resourceCulture);
+                return ResourceManager.GetString("PageShipmentSearch", resourceCulture);
             }
         }
         

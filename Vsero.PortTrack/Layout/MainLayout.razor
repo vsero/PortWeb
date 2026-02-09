@@ -15,7 +15,7 @@
 <MudLayout>
 
     @* Широкий экран *@
-   <MudHidden Breakpoint="Breakpoint.SmAndDown">
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
         <MudAppBar>
             <MudText Typo="Typo.h6">@LP.AppBarTitle</MudText>
             <MudSpacer />
@@ -23,9 +23,12 @@
         </MudAppBar>
         <MudDrawer Open="true" ClipMode="DrawerClipMode.Always" Elevation="2">
             <MudNavMenu>
-                <MudNavLink href="shipmentSearch" Icon="@Icons.Material.Filled.Search">@LP.PageTracking</MudNavLink>
+                <MudNavLink href="shipmentSearch" Icon="@Icons.Material.Filled.Search">@LP.PageShipmentSearch</MudNavLink>
+                @if (UserContext.IsTg)
+                {
+                    <MudNavLink href="shipmentsList" Icon="@Icons.Material.Filled.ListAlt">@LP.PageShipmentList</MudNavLink>
+                }
                 <MudNavLink href="vessels" Icon="@Icons.Material.Filled.DirectionsBoat">@LP.PageVessels</MudNavLink>
-                <MudNavLink href="shipmentsList" Icon="@Icons.Material.Filled.ListAlt">@LP.PageShipments</MudNavLink>
             </MudNavMenu>
         </MudDrawer>
     </MudHidden>
@@ -34,7 +37,12 @@
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
         <MudAppBar Bottom="true" Fixed="true">
             <MudSpacer />
-            <MudIconButton Icon="@Icons.Material.Filled.Search" href="tracking" />
+            <MudIconButton Icon="@Icons.Material.Filled.Search" href="shipmentSearch" />
+            @if (UserContext.IsTg)
+            {
+                <MudSpacer />
+                <MudIconButton Icon="@Icons.Material.Filled.Search" href="shipmentList" />
+            }
             <MudSpacer />
             <MudIconButton Icon="@Icons.Material.Filled.DirectionsBoat" href="vessels" />
             <MudSpacer />
@@ -42,7 +50,7 @@
             <MudSpacer />
         </MudAppBar>
     </MudHidden>
-    
+
     <MudMainContent Class="pt-0 pb-16 pt-md-16 pb-md-0">
         @Body
     </MudMainContent>

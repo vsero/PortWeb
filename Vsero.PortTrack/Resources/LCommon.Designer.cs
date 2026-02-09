@@ -106,20 +106,20 @@ namespace Vsero.PortTrack.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Shipment search.
+        /// </summary>
+        public static string PageShipmentSearchHeader {
+            get {
+                return ResourceManager.GetString("PageShipmentSearchHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Search.
         /// </summary>
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Shipment tracking.
-        /// </summary>
-        public static string ShipmentTracking {
-            get {
-                return ResourceManager.GetString("ShipmentTracking", resourceCulture);
             }
         }
     }
