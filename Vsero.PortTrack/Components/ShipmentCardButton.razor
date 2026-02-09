@@ -1,0 +1,41 @@
+﻿@using LC = Vsero.PortTrack.Resources.LCommon
+
+
+<MudButton OnClick="OnClick"
+           Variant="Variant.Text"
+           Size="Size.Large"
+           Color="@ButtonColor"
+           StartIcon="@Icons.Material.Outlined.AddAlert">@Label</MudButton>
+
+@code {
+
+    [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter] public ButtonKind Kind { get; set; }
+
+
+
+    public enum ButtonKind
+    {
+        Add,
+        Delete
+    }
+
+
+
+    private string Label => Kind switch
+    {
+        ButtonKind.Add => LC.Add,
+        ButtonKind.Delete => LC.Delete,
+        _ => string.Empty
+    };
+
+
+
+    private Color ButtonColor => Kind switch
+    {
+        ButtonKind.Add => Color.Success,
+        ButtonKind.Delete => Color.Secondary,
+        _ => Color.Info
+    };
+
+}

@@ -118,18 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Найти</value>
   </data>
   <data name="ShipmentTracking" xml:space="preserve">
-    <value>Shipment tracking</value>
+    <value>Отслеживание груза</value>
   </data>
   <data name="Label_Search" xml:space="preserve">
-    <value>Container No, Label, BL number</value>
+    <value>Номер контейнера, маркировка, коносамент</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Hide</value>
+    <value>Скрыть</value>
   </data>
   <data name="Expand" xml:space="preserve">
-    <value>Show previous</value>
+    <value>Показать предыдущие</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
   </data>
 </root>

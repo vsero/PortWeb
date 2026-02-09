@@ -15,7 +15,12 @@
     <MudStack Spacing="1">
         @foreach (var shipment in _shipments)
         {
-            <ShipmentCard Shipment="shipment" IsExpandable="true" OnDelete="ShipmentCard_Delete"/>
+            <ShipmentCard Shipment="shipment" IsExpandable="true">
+                <CardActions>
+                    <MudSpacer />
+                    <ShipmentCardButton OnClick="@(() => ShipmentCard_Delete(shipment))" Kind="ShipmentCardButton.ButtonKind.Delete" />
+                </CardActions>
+            </ShipmentCard>
         }
     </MudStack>
 
@@ -47,7 +52,7 @@
         _shipments.Clear();
 
         IEnumerable<CargoShipment>? cargoShipments = null;
-        var apiTguser = ApiTguser();
+        var apiTguser = UserContext.ApiTguser();
         if (apiTguser is not null)
         {
             (cargoShipments, _errorMessage) = await Api.NotifyShipmentGetAsync(apiTguser, CancellationToken());
@@ -62,28 +67,20 @@
 
 
 
-    private void ShipmentCard_Delete(CargoShipment shipment)
-    {
+    private async Task ShipmentCard_Delete(CargoShipment shipment)
+    { 
+        bool result = false;
+        var apiTguser = UserContext.ApiTguser();
+        if (apiTguser is not null)
+        {
+            (result, _errorMessage) = await Api.NotifyShipmentDeleteAsync(apiTguser, shipment, CancellationToken());
+        }
+
         if (_shipments.Contains(shipment))
         {
             _shipments.Remove(shipment);
             StateHasChanged();
         }
     }
-
-
-
-    private Vsero.UTrcak.TgUser? ApiTguser()
-    {
-        return new()
-            {
-                Id = 412798134,
-                Username = "VitalySerokurov",
-                FirstName = "Vitaly"
-            };
-
-        //return UserContext.TgUser?.ToApiModel();
-    }
-
 
 }

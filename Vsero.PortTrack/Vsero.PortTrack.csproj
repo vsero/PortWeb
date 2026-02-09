@@ -32,10 +32,10 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Resources\LTracking.Designer.cs">
+    <Compile Update="Resources\LCommon.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>LTracking.resx</DependentUpon>
+      <DependentUpon>LCommon.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\LVessels.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -62,9 +62,9 @@
       <LastGenOutput>LModel.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\LTracking.resx">
+    <EmbeddedResource Update="Resources\LCommon.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LTracking.Designer.cs</LastGenOutput>
+      <LastGenOutput>LCommon.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\LVessels.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

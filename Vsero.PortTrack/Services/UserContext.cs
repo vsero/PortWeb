@@ -1,18 +1,22 @@
 ﻿using Microsoft.JSInterop;
+using Vsero.UTrcak;
+using U = Vsero.UTrcak;
 
 namespace Vsero.PortTrack.Services;
 
+
 public class UserContext
 {
-    private readonly IJSRuntime _js;
+    public UserContext(IJSRuntime js) => _js = js;
     public event Action? OnChange;
 
     private bool _isMobile;
     private bool _isDarkMode;
     private bool _isTg;
     private string _culture = "ru-RU";
+    private readonly IJSRuntime _js;
 
-    public UserContext(IJSRuntime js) => _js = js;
+
 
     public bool IsMobile
     {
@@ -27,6 +31,8 @@ public class UserContext
         }
     }
 
+
+
     public bool IsDarkMode
     {
         get => _isDarkMode;
@@ -39,6 +45,8 @@ public class UserContext
             }
         }
     }
+
+
 
     public bool IsTg
     {
@@ -53,6 +61,8 @@ public class UserContext
         }
     }
 
+
+
     public string Culture
     {
         get => _culture;
@@ -66,23 +76,56 @@ public class UserContext
         }
     }
 
+
+    
+    public U.TgUser? ApiTguser()
+    {
+        return new()
+        {
+            Id = 412798134,
+            Username = "VitalySerokurov",
+            FirstName = "Vitaly"
+        };
+
+        //if (TgUser is null)
+        //    return null;
+
+        //return new U.TgUser
+        //{
+        //    Id = TgUser.Id,
+        //    Username = TgUser.Username,
+        //    FirstName = TgUser.FirstName
+        //};
+    }
+
+
+
     public async Task SetCultureAsync(string culture)
     {
         await _js.InvokeVoidAsync("localStorage.setItem", "selectedCulture", culture);
         Culture = culture;
     }
 
+
+
     public TgUser? TgUser { get; set; }
+
+
 
     private void NotifyChanged() => OnChange?.Invoke();
 
 }
+
+
+
 
 public class TgInitData
 {
     public TgUser? User { get; set; }
     public string QueryId { get; set; } = string.Empty;
 }
+
+
 
 public class TgUser
 {
