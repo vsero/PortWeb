@@ -138,4 +138,8 @@
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
   </data>
+  <data name="Label_NoShipmentsAdded" xml:space="preserve">
+    <value>Грузы не добавлены
+Используйте поиск</value>
+  </data>
 </root>

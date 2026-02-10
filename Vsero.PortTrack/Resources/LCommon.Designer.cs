@@ -97,6 +97,16 @@ namespace Vsero.PortTrack.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на No shipments added
+        ///Search one.
+        /// </summary>
+        public static string Label_NoShipmentsAdded {
+            get {
+                return ResourceManager.GetString("Label_NoShipmentsAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Container No, Label, BL number.
         /// </summary>
         public static string Label_Search {

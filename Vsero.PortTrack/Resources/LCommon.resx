@@ -138,4 +138,8 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Label_NoShipmentsAdded" xml:space="preserve">
+    <value>No shipments added
+Search one</value>
+  </data>
 </root>

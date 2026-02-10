@@ -1,5 +1,6 @@
 ﻿@page "/shipmentList"
 @using Vsero.PortTrack.Components
+@using LC = Vsero.PortTrack.Resources.LCommon
 @using Vsero.UTrcak.V1
 @inject ApiClient Api
 @inject UserContext UserContext
@@ -9,8 +10,21 @@
 
 <MudContainer MaxWidth="MaxWidth.Medium" Class="pa-4">
 
-    <PageLoading IsLoading="@_isLoading" />
     <ErrorAlertBar ErrorMessage="@_errorMessage" />
+    <PageLoading IsLoading="@_isLoading" />
+
+    @if (!_shipments.Any() && !_isLoading && String.IsNullOrEmpty(_errorMessage))
+    {
+        <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Style="min-height: 60vh;">
+            <MudIcon Icon="@Icons.Material.Filled.Inventory"
+                     Style="font-size: 8rem;"
+                     Color="Color.Default"
+                     Class="mb-4 opacity-50" />
+            <MudText Typo="Typo.h5" Align="Align.Center" Color="Color.Default" Class="mud-text-secondary" Style="white-space: pre-line;">
+                @LC.Label_NoShipmentsAdded
+            </MudText>
+        </MudStack>
+    }
 
     <MudStack Spacing="1">
         @foreach (var shipment in _shipments)
