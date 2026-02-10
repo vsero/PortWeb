@@ -175,10 +175,10 @@
     <value>BL number</value>
   </data>
   <data name="HandlingStarted" xml:space="preserve">
-    <value>Handling started</value>
+    <value>Started</value>
   </data>
   <data name="HandlingFinished" xml:space="preserve">
-    <value>Handling finished</value>
+    <value>Finished</value>
   </data>
   <data name="HandlingEvents" xml:space="preserve">
     <value>Handling events</value>

@@ -187,7 +187,7 @@ namespace Vsero.PortTrack.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Handling finished.
+        ///   Ищет локализованную строку, похожую на Finished.
         /// </summary>
         public static string HandlingFinished {
             get {
@@ -196,7 +196,7 @@ namespace Vsero.PortTrack.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Handling started.
+        ///   Ищет локализованную строку, похожую на Started.
         /// </summary>
         public static string HandlingStarted {
             get {

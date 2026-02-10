@@ -121,19 +121,19 @@
     <value>Погрузка</value>
   </data>
   <data name="GateIn" xml:space="preserve">
-    <value>Завоз через КПП</value>
+    <value>Заехал</value>
   </data>
   <data name="Unloading" xml:space="preserve">
     <value>Выгрузка</value>
   </data>
   <data name="GateOut" xml:space="preserve">
-    <value>Вывоз через КПП</value>
+    <value>Выехал</value>
   </data>
   <data name="YardIn" xml:space="preserve">
-    <value>Помещен на хранение</value>
+    <value>Принят</value>
   </data>
   <data name="YardOut" xml:space="preserve">
-    <value>Снят с хранения</value>
+    <value>Выдан</value>
   </data>
   <data name="Qty" xml:space="preserve">
     <value>Кол-во</value>
@@ -175,10 +175,10 @@
     <value>Коносамент</value>
   </data>
   <data name="HandlingStarted" xml:space="preserve">
-    <value>Обработка начата</value>
+    <value>Начат</value>
   </data>
   <data name="HandlingFinished" xml:space="preserve">
-    <value>Обработка завершена</value>
+    <value>Завершен</value>
   </data>
   <data name="HandlingEvents" xml:space="preserve">
     <value>События обработки</value>
