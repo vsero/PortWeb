@@ -7,7 +7,7 @@
 
 @if (Shipment is not null)
 {
-    <MudCard Class="mt-6" Elevation="4">
+    <MudCard @onclick="ToggleCardExpand" Class="mt-6" Elevation="4">
 
         <MudCardHeader>
             <CardHeaderContent>
@@ -16,17 +16,17 @@
 
                     @if (_cardExpanded)
                     {
-                        <MudText Typo="Typo.subtitle1" Class="flex-grow-1 text-truncate">
+                        <MudText Typo="Typo.body1" Class="flex-grow-1 text-truncate">
                             @Shipment.Title
                         </MudText>
                     }
                     else
                     {
                         <MudStack Spacing="1">
-                            <MudText Typo="Typo.subtitle1" Class="flex-grow-1 text-truncate" Style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
+                            <MudText Typo="Typo.body1" Class="flex-grow-1 text-truncate" Style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">
                                 @Shipment.Title
                             </MudText>
-                            <MudText Typo="Typo.body1">@Shipment.VesselCallTitle</MudText>
+                            <MudText Typo="Typo.subtitle1">@Shipment.VesselCallTitle</MudText>
                         </MudStack>
                     }
 
@@ -40,16 +40,10 @@
                                  Class="ma-0 mb-2">
                             @LMs[_lastEvent?.Type.ToString() ?? LM.Expected]
                         </MudChip>
-
                         <MudText Typo="Typo.body2" Class="mud-text-secondary px-2">
                             @Shipment.HandlingEvents.Last().Timestamp.ToStringOrEmpty(LM.DateTimeShortFormat)
                         </MudText>
                     </MudStack>
-
-                    @if (_cardIsExpandable)
-                    {
-                        <MudIconButton OnClick="ToggleCardExpand" Icon="@(_cardExpanded? Icons.Material.Filled.ExpandLess : Icons.Material.Filled.ExpandMore)" />
-                    }
 
                 </MudStack>
 
@@ -128,15 +122,16 @@
 @code {
 
     [Parameter] public CargoShipment? Shipment { get; set; }
-    [Parameter] public bool IsExpandable { get; set; }
+    [Parameter] public bool Expandable { get; set; }
+    [Parameter] public bool Expanded { get; set; }
     [Parameter] public RenderFragment? CardActions { get; set; }
+    [Parameter] public EventCallback<(CargoShipment shipment, bool expanded)> OnExpand { get; set; }
 
     private IEnumerable<CargoHandlingEvent> _visibleEvents = [];
     private int _eventsCount = 0;
     private int _maxVisibleEvents = 5;
     private bool _eventsExpanded;
     private bool _cardExpanded;
-    private bool _cardIsExpandable;
     private CargoHandlingEvent? _lastEvent;
 
 
@@ -157,35 +152,34 @@
 
     RenderFragment EventCard(CargoHandlingEvent handlingEvent) =>
     @<MudGrid Spacing="2">
-        <MudItem xs="8">
-            <MudText Typo="Typo.h6" Class="mt-n1">@LMs[handlingEvent.Type.ToString()]</MudText>
-            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                <MudIcon Icon="@HandlingEventIcon(handlingEvent)" Color="Color.Primary" />
-                <MudText Typo="Typo.body2" Class="mud-text-secondary">
-                    @handlingEvent.Location.Title
-                </MudText>
+    <MudItem xs="8">
+        <MudText Typo="Typo.h6" Class="mt-n1">@LMs[handlingEvent.Type.ToString()]</MudText>
+        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+            <MudIcon Icon="@HandlingEventIcon(handlingEvent)" Color="Color.Primary" />
+            <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                @handlingEvent.Location.Title
+            </MudText>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="4">
+        <MudStack AlignItems="AlignItems.End" Spacing="0" Class="mt-1">
+            <MudStack Row="true" Wrap="Wrap.Wrap" Justify="Justify.FlexEnd" Spacing="2">
+                <MudText Typo="Typo.body2">@($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.DateFormat)}")</MudText>
+                <MudText Typo="Typo.body2"> @($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.TimeFormat)}")</MudText>
             </MudStack>
-        </MudItem>
-        <MudItem xs="4">
-            <MudStack AlignItems="AlignItems.End" Spacing="0" Class="mt-1">
-                <MudStack Row="true" Wrap="Wrap.Wrap" Justify="Justify.FlexEnd" Spacing="2">
-                    <MudText Typo="Typo.body2">@($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.DateFormat)}")</MudText>
-                    <MudText Typo="Typo.body2"> @($"{handlingEvent.Timestamp.ToStringOrEmpty(LM.TimeFormat)}")</MudText>
-                </MudStack>
-                <MudText Typo="Typo.body2" Class="mud-text-secondary">
-                    @($"{LM.Qty}: {handlingEvent.Quantity}")
-                </MudText>
-            </MudStack>
-        </MudItem>
-    </MudGrid>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                @($"{LM.Qty}: {handlingEvent.Quantity}")
+            </MudText>
+        </MudStack>
+    </MudItem>
+</MudGrid>
     ;
 
 
 
     protected override void OnParametersSet()
     {
-        _cardIsExpandable = IsExpandable;
-        _cardExpanded = !_cardIsExpandable;
+        _cardExpanded = Expanded;
         if (Shipment != null)
         {
             SetShipmentVariables();
@@ -194,9 +188,13 @@
 
 
 
-    private void ToggleCardExpand()
+    private async Task ToggleCardExpand()
     {
-        _cardExpanded = !_cardExpanded;
+        if (Expandable && Shipment is not null)
+        {
+            _cardExpanded = !_cardExpanded;
+            await OnExpand.InvokeAsync((Shipment, _cardExpanded));
+        }
     }
 
 

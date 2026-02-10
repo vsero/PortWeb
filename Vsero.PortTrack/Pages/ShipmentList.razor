@@ -29,7 +29,11 @@
     <MudStack Spacing="1">
         @foreach (var shipment in _shipments)
         {
-            <ShipmentCard @key="shipment" Shipment="shipment" IsExpandable="true">
+            <ShipmentCard @key="shipment.Uuid"
+                          OnExpand="ShipmentCard_OnExpand"
+                          Shipment="shipment"
+                          Expandable="true"
+                          Expanded="@_cardStates.GetValueOrDefault(shipment.Uuid, new()).Expanded">
                 <CardActions>
                     @if (UserContext.IsTg)
                     {
@@ -51,6 +55,7 @@
     private bool _isLoading;
     private string _errorMessage = string.Empty;
     private List<CargoShipment> _shipments = [];
+    private Dictionary<Guid, CardState> _cardStates = [];
 
 
 
@@ -76,10 +81,25 @@
         }
 
         if (cargoShipments is not null)
+        {
             _shipments = cargoShipments.ToList();
+            SetupCardStates();
+        }
 
         _isLoading = false;
         StateHasChanged();
+    }
+
+
+
+    private void ShipmentCard_OnExpand((CargoShipment shipment, bool expanded) args)
+    {
+        if (!_cardStates.TryGetValue(args.shipment.Uuid, out var state))
+        {
+            state = new CardState();
+            _cardStates[args.shipment.Uuid] = state;
+        }
+        state.Expanded = args.expanded;
     }
 
 
@@ -93,8 +113,30 @@
             (result, _errorMessage) = await Api.NotifyShipmentDeleteAsync(apiTguser, shipment, CancellationToken());
         }
 
-        if (_shipments.Contains(shipment))
-            _shipments.Remove(shipment);
+        _shipments.Remove(shipment);
+        _cardStates.Remove(shipment.Uuid);
+    }
+
+
+
+
+    private void SetupCardStates()
+    {
+        foreach (var shipment in _shipments)
+        {
+            if (!_cardStates.ContainsKey(shipment.Uuid))
+            {
+                _cardStates.Add(shipment.Uuid, new());
+            }
+        }
+        ;
+    }
+
+
+
+    private class CardState
+    {
+        public bool Expanded { get; set; }
     }
 
 }
