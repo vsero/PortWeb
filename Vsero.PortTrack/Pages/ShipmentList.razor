@@ -48,11 +48,13 @@
 </MudContainer>
 
 <ButtonRefreshFloating OnClick="@GetShipments" />
+<AlertBarError ErrorMessage="@_isUpd" />
 
 
 
 @code {
 
+    private string _isUpd = string.Empty;
     private bool _isLoading;
     private string _errorMessage = string.Empty;
     private List<CargoShipment> _shipments = [];
@@ -70,6 +72,7 @@
 
     protected override async Task OnPageBecameVisibleAsync()
     {
+        _isUpd = "Updated";
         await GetShipments();
     }
 
