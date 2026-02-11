@@ -130,7 +130,7 @@
     <value>Вывоз</value>
   </data>
   <data name="YardIn" xml:space="preserve">
-    <value>Принят</value>
+    <value>Хранение</value>
   </data>
   <data name="YardOut" xml:space="preserve">
     <value>Выдан</value>
