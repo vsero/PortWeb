@@ -192,4 +192,13 @@
   <data name="Expected" xml:space="preserve">
     <value>Expected</value>
   </data>
+  <data name="GatedOut" xml:space="preserve">
+    <value>Gated-out</value>
+  </data>
+  <data name="Loaded" xml:space="preserve">
+    <value>Loaded</value>
+  </data>
+  <data name="Unloaded" xml:space="preserve">
+    <value>Unloaded</value>
+  </data>
 </root>

@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
-using Vsero.UTrcak;
 using U = Vsero.UTrcak;
+
 
 namespace Vsero.PortTrack.Services;
 
@@ -50,8 +50,15 @@ public class UserContext
 
     public bool IsTg
     {
-        get => _isTg;
-        //get => true;
+        get
+        {
+#if DEBUG
+            return true;
+#else
+            return _isTg;
+#endif
+        }
+
         set
         {
             if (_isTg != value)
@@ -78,16 +85,18 @@ public class UserContext
     }
 
 
-    
+
     public U.TgUser? ApiTguser()
     {
-        //return new()
-        //{
-        //    Id = 412798134,
-        //    Username = "VitalySerokurov",
-        //    FirstName = "Vitaly"
-        //};
 
+#if DEBUG
+        return new()
+        {
+            Id = 412798134,
+            Username = "VitalySerokurov",
+            FirstName = "Vitaly"
+        };
+#else
         if (TgUser is null)
             return null;
 
@@ -97,6 +106,7 @@ public class UserContext
             Username = TgUser.Username,
             FirstName = TgUser.FirstName
         };
+#endif
     }
 
 

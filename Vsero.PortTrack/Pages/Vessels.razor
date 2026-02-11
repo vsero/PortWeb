@@ -8,7 +8,6 @@
 @inherits PortTrackComponentBase
 
 
-
 @{
     RenderFragment<VesselCall> VesselCard = (call) => __builder =>
     {
@@ -128,7 +127,7 @@
 }
 
 
-<ErrorAlertBar ErrorMessage="@_errorMessage" />
+<AlertBarError ErrorMessage="@_errorMessage" />
 <PageLoading IsLoading="@_isLoading" />
 
 @if (!string.IsNullOrEmpty(_errorMessage))
@@ -197,16 +196,27 @@
 </MudStack>
 </MudContainer>
 
+<ButtonRefreshFloating OnClick="@GetVesselCalls" />
+
 @code {
 
     private bool _isLoading;
     private string _errorMessage = string.Empty;
     private List<VesselCall> VesselCalls { get; set; } = new();
 
+
+
     protected override Task OnInitializedAsync()
     {
         _ = GetVesselCalls();
         return base.OnInitializedAsync();
+    }
+
+
+
+    protected override async Task OnPageBecameVisibleAsync()
+    {
+        await GetVesselCalls();
     }
 
 

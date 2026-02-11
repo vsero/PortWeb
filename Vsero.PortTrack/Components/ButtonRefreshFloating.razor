@@ -1,0 +1,13 @@
+﻿
+<div style="position: fixed; bottom: 80px; right: 20px; z-index: 1000; opacity: 0.5;">
+    <MudFab Color="Color.Default"
+            StartIcon="@Icons.Material.Filled.Refresh"
+            OnClick="@OnClick"
+            Size="Size.Medium" />
+</div>
+
+@code {
+        
+    [Parameter] public EventCallback OnClick { get; set; }    
+
+}

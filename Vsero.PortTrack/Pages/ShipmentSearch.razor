@@ -78,12 +78,12 @@
 
     </MudPaper>
 
-    <ErrorAlertBar ErrorMessage="@_errorMessage" />
+    <AlertBarError ErrorMessage="@_errorMessage" />
 
     <ShipmentCard Shipment="@_shipment" Expandable="false" Expanded="true">
         <CardActions>
             <MudSpacer />
-            @if (UserContext.IsTg)
+            @if (UserContext.IsTg && _shipment is not null && !_shipment.IsFinished)
             {
                 @if (!_shipmentAdded)
                 {

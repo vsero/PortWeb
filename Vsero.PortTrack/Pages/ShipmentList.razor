@@ -10,7 +10,7 @@
 
 <MudContainer MaxWidth="MaxWidth.Medium" Class="pa-4">
 
-    <ErrorAlertBar ErrorMessage="@_errorMessage" />
+    <AlertBarError ErrorMessage="@_errorMessage" />
     <PageLoading IsLoading="@_isLoading" />
 
     @if (!_shipments.Any() && !_isLoading && String.IsNullOrEmpty(_errorMessage))
@@ -47,6 +47,7 @@
 
 </MudContainer>
 
+<ButtonRefreshFloating OnClick="@GetShipments" />
 
 
 
@@ -63,6 +64,13 @@
     {
         _ = GetShipments();
         return base.OnInitializedAsync();
+    }
+
+
+
+    protected override async Task OnPageBecameVisibleAsync()
+    {
+        await GetShipments();
     }
 
 

@@ -160,6 +160,15 @@ namespace Vsero.PortTrack.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Gated-out.
+        /// </summary>
+        public static string GatedOut {
+            get {
+                return ResourceManager.GetString("GatedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Gate-in.
         /// </summary>
         public static string GateIn {
@@ -214,6 +223,15 @@ namespace Vsero.PortTrack.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Loaded.
+        /// </summary>
+        public static string Loaded {
+            get {
+                return ResourceManager.GetString("Loaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Loading.
         /// </summary>
         public static string Loading {
@@ -246,6 +264,15 @@ namespace Vsero.PortTrack.Resources {
         public static string TotalQty {
             get {
                 return ResourceManager.GetString("TotalQty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Unloaded.
+        /// </summary>
+        public static string Unloaded {
+            get {
+                return ResourceManager.GetString("Unloaded", resourceCulture);
             }
         }
         

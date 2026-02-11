@@ -121,13 +121,13 @@
     <value>Погрузка</value>
   </data>
   <data name="GateIn" xml:space="preserve">
-    <value>Заехал</value>
+    <value>Завоз</value>
   </data>
   <data name="Unloading" xml:space="preserve">
     <value>Выгрузка</value>
   </data>
   <data name="GateOut" xml:space="preserve">
-    <value>Выехал</value>
+    <value>Вывоз</value>
   </data>
   <data name="YardIn" xml:space="preserve">
     <value>Принят</value>
@@ -191,5 +191,14 @@
   </data>
   <data name="Expected" xml:space="preserve">
     <value>Ожидается</value>
+  </data>
+  <data name="GatedOut" xml:space="preserve">
+    <value>Вывезен</value>
+  </data>
+  <data name="Loaded" xml:space="preserve">
+    <value>Погружен</value>
+  </data>
+  <data name="Unloaded" xml:space="preserve">
+    <value>Выгружен</value>
   </data>
 </root>

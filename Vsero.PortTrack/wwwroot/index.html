@@ -101,6 +101,7 @@
 
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js" autostart="false"></script>
     <script>
+
         (function () {
             const culture = localStorage.getItem('selectedCulture') || 'ru-RU';
             window.Blazor.start({
@@ -108,6 +109,16 @@
                 applicationCulture: culture
             });
         })();
+
+        // перехват события фокуса окна
+        window.listenVisibilityChange = (dotNetHelper) => {
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === 'visible') {
+                    dotNetHelper.invokeMethodAsync('OnVisibilityChanged');
+                }
+            });
+        };
+
     </script>
 
 </body>

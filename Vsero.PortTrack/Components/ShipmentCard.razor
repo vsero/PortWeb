@@ -34,11 +34,11 @@
 
                     <MudStack Spacing="0" AlignItems="AlignItems.End" AlignSelf="AlignSelf.Start" Class="flex-none">
                         <MudChip T="string"
-                                 Color="@(ShipmentChipColor())"
+                                 Color="@_lastEventStyle.color"
                                  Variant="Variant.Outlined"
                                  Size="Size.Medium"
                                  Class="ma-0 mb-2">
-                            @LMs[_lastEvent?.Type.ToString() ?? LM.Expected]
+                            @_lastEventStyle.label
                         </MudChip>
                         <MudText Typo="Typo.body2" Class="mud-text-secondary px-2">
                             @Shipment.HandlingEvents.Last().Timestamp.ToStringOrEmpty(LM.DateTimeShortFormat)
@@ -133,15 +133,16 @@
     private bool _eventsExpanded;
     private bool _cardExpanded;
     private CargoHandlingEvent? _lastEvent;
+    private (Color color, String label) _lastEventStyle;
 
 
 
     RenderFragment ShipmentPropery(string label, string value) =>
     @<text>
-        <MudItem xs="5">
+        <MudItem xs="4">
             <MudText Typo="Typo.body1">@label:</MudText>
         </MudItem>
-        <MudItem xs="7">
+        <MudItem xs="8">
             <MudText Typo="Typo.body1" Class="ff-mono">
                 <b>@value</b>
             </MudText>
@@ -214,6 +215,7 @@
             _visibleEvents = _eventsExpanded ? Shipment.HandlingEvents : Shipment.HandlingEvents.TakeLast(5);
             _eventsCount = Shipment.HandlingEvents.Count();
             _lastEvent = Shipment.HandlingEvents.Last();
+            _lastEventStyle = LastEventStyle();
         }
     }
 
@@ -246,6 +248,39 @@
             };
         }
         return Color.Default;
+    }
+
+
+
+    private (Color color, String label) LastEventStyle()
+    {
+        if (_lastEvent is null || Shipment is null)
+            return (Color.Default, "N/A");
+
+        Color color = Color.Success;
+        String label = LMs[_lastEvent.Type.ToString()];
+
+        if (Shipment.IsFinished)
+        {
+            label = _lastEvent.Type switch
+            {
+                CargoHandlingEventType.GateOut => LM.GatedOut,
+                CargoHandlingEventType.Loading => LM.Loaded,
+                CargoHandlingEventType.Unloading => LM.Unloaded,
+                _ => label
+            };
+        }
+        else
+        {
+            color = _lastEvent.Type switch
+            {
+                CargoHandlingEventType.GateIn => Color.Warning,
+                CargoHandlingEventType.YardIn => Color.Warning,
+                CargoHandlingEventType.Unloading => Color.Warning,
+                _ => Color.Default
+            };
+        }
+        return (color, label);
     }
 
 }
