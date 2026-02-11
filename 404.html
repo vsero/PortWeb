@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vsero.PortTrack</title>
     <base href="/PortWeb/" />
-    <link href="_framework/dotnet.7wm85d39ih.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-5w7EY17qJu8sRRud0b0LNcwNkkNzpuzTnmBQ+U4TrY8=" />
+    <link href="_framework/dotnet.3h6j0692kz.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-h4+xKjd2V3M9TTkxwlWH7Lf20ib2A6K95rHd9tcyzBY=" />
     <link rel="stylesheet" href="css/app.css" />
     <script type="importmap">{
   "imports": {
     "./_framework/blazor.webassembly.js": "./_framework/blazor.webassembly.66stpp682q.js",
-    "./_framework/dotnet.js": "./_framework/dotnet.7wm85d39ih.js",
+    "./_framework/dotnet.js": "./_framework/dotnet.3h6j0692kz.js",
     "./_framework/dotnet.native.js": "./_framework/dotnet.native.69poregybn.js",
     "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.q5rqv3xrhm.js"
   },
@@ -19,8 +19,8 @@
   "integrity": {
     "./_framework/blazor.webassembly.66stpp682q.js": "sha256-3lCWrko3zwspV40aQhs2S/IMkRSarnHRKIdkHhuXIBA=",
     "./_framework/blazor.webassembly.js": "sha256-3lCWrko3zwspV40aQhs2S/IMkRSarnHRKIdkHhuXIBA=",
-    "./_framework/dotnet.7wm85d39ih.js": "sha256-5w7EY17qJu8sRRud0b0LNcwNkkNzpuzTnmBQ+U4TrY8=",
-    "./_framework/dotnet.js": "sha256-5w7EY17qJu8sRRud0b0LNcwNkkNzpuzTnmBQ+U4TrY8=",
+    "./_framework/dotnet.3h6j0692kz.js": "sha256-h4+xKjd2V3M9TTkxwlWH7Lf20ib2A6K95rHd9tcyzBY=",
+    "./_framework/dotnet.js": "sha256-h4+xKjd2V3M9TTkxwlWH7Lf20ib2A6K95rHd9tcyzBY=",
     "./_framework/dotnet.native.69poregybn.js": "sha256-JvdIvkSF0x6euoPT2QnQSMg2Gyv2oJbFeBi1XmWLYFU=",
     "./_framework/dotnet.native.js": "sha256-JvdIvkSF0x6euoPT2QnQSMg2Gyv2oJbFeBi1XmWLYFU=",
     "./_framework/dotnet.runtime.js": "sha256-ArknccFM1sHNVcih0x1h52AG+abNCoQjl6BlVrv3ePw=",
@@ -128,7 +128,7 @@
             });
         })();
 
-        // перехват события фокуса окна
+        // перехват события фокуса окна браузера
         window.listenVisibilityChange = (dotNetHelper) => {
             document.addEventListener("visibilitychange", () => {
                 if (document.visibilityState === 'visible') {
@@ -136,6 +136,14 @@
                 }
             });
         };
+
+        // перехват события активации MiniApp
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.onEvent('activated', () => {
+                console.log("Telegram App Activated");
+                dotNetHelper.invokeMethodAsync('OnVisibilityChanged');
+            });
+        }
 
     </script>
 
