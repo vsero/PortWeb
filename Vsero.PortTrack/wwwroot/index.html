@@ -110,7 +110,7 @@
             });
         })();
 
-        // перехват события фокуса окна
+        // перехват события фокуса окна браузера
         window.listenVisibilityChange = (dotNetHelper) => {
             document.addEventListener("visibilitychange", () => {
                 if (document.visibilityState === 'visible') {
@@ -118,6 +118,14 @@
                 }
             });
         };
+
+        // перехват события активации MiniApp
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.onEvent('activated', () => {
+                console.log("Telegram App Activated");
+                dotNetHelper.invokeMethodAsync('OnVisibilityChanged');
+            });
+        }
 
     </script>
 
