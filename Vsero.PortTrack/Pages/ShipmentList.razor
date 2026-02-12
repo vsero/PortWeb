@@ -4,6 +4,7 @@
 @using Vsero.UTrcak.V1
 @inject ApiClient Api
 @inject UserContext UserContext
+@inject ISnackbar Snackbar
 @inherits PortTrackComponentBase
 
 
@@ -29,7 +30,7 @@
     <MudStack Spacing="0">
         @foreach (var shipment in _shipments)
         {
-            <MudSwipeArea OnSwipe="@(() => ShipmentCard_Delete(shipment))" @key="shipment.Uuid">
+            <MudSwipeArea OnSwipe="@((SwipeEventArgs e) => ShipmentCard_Swipe(e, shipment))" @key="shipment.Uuid">
                 <ShipmentCard @key="shipment.Uuid"
                               OnExpand="ShipmentCard_OnExpand"
                               Shipment="shipment"
@@ -125,6 +126,17 @@
 
         _shipments.Remove(shipment);
         _cardStates.Remove(shipment.Uuid);
+    }
+
+
+
+    private async Task ShipmentCard_Swipe(SwipeEventArgs e, CargoShipment shipment)
+    {
+        if (e.SwipeDirection == SwipeDirection.RightToLeft)
+        {
+            await ShipmentCard_Delete(shipment);
+            Snackbar.Add("ShipmentDeleted", Severity.Info);
+        }
     }
 
 
