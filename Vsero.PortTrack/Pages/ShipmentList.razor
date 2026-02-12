@@ -29,19 +29,21 @@
     <MudStack Spacing="0">
         @foreach (var shipment in _shipments)
         {
-            <ShipmentCard @key="shipment.Uuid"
-                          OnExpand="ShipmentCard_OnExpand"
-                          Shipment="shipment"
-                          Expandable="true"
-                          Expanded="@_cardStates.GetValueOrDefault(shipment.Uuid, new()).Expanded">
-                <CardActions>
-                    @if (UserContext.IsTg)
-                    {
-                        <MudSpacer />
-                        <ShipmentCardButton OnClick="@(() => ShipmentCard_Delete(shipment))" Kind="ShipmentCardButton.ButtonKind.Delete" />
-                    }
-                </CardActions>
-            </ShipmentCard>
+            <MudSwipeArea OnSwipe="@(() => ShipmentCard_Delete(shipment))" @key="shipment.Uuid">
+                <ShipmentCard @key="shipment.Uuid"
+                              OnExpand="ShipmentCard_OnExpand"
+                              Shipment="shipment"
+                              Expandable="true"
+                              Expanded="@_cardStates.GetValueOrDefault(shipment.Uuid, new()).Expanded">
+                    <CardActions>
+                        @if (UserContext.IsTg)
+                        {
+                            <MudSpacer />
+                            <ShipmentCardButton OnClick="@(() => ShipmentCard_Delete(shipment))" Kind="ShipmentCardButton.ButtonKind.Delete" />
+                        }
+                    </CardActions>
+                </ShipmentCard>
+            </MudSwipeArea>
         }
     </MudStack>
 
