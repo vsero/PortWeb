@@ -39,7 +39,7 @@ public class VesselCall
     [JsonIgnore]
     public UnloadingStats UnStats => new(this);
 
-   private VesselCallStage GetStage()
+    private VesselCallStage GetStage()
     {
         return this switch
         {
@@ -77,7 +77,7 @@ public class VesselCall
         public UnloadingStats(VesselCall call)
         {
             var unloadingTotals = call.HandlingTotals.Where(t => t.HandlingType == HandlingType.Unloading);
-            
+
             var isoUnloading = unloadingTotals.Where(t => t.CargoType == CargoType.IsoContainer);
             IsoDeclared = isoUnloading?.Sum(t => t.DeclaredPieces) ?? 0;
             IsoHandled = isoUnloading?.Sum(t => t.HandledPieces) ?? 0;
@@ -88,7 +88,9 @@ public class VesselCall
             GenHandled = genUnloading?.Sum(t => t.HandledWeight) ?? 0;
             GenPercent = GenDeclared > 0 ? (int)Math.Round(GenHandled / GenDeclared * 100) : 0;
 
-            double totalPercent = (IsoPercent + GenPercent) / 2;
+            var parts = (IsoPercent > 0 ? 1 : 0) + (GenPercent > 0 ? 1 : 0);
+
+            double totalPercent = parts > 0 ? (IsoPercent + GenPercent) / parts : 0;
             TotalPercent = (int)Math.Round(totalPercent);
 
             IsUnloaded = IsoDeclared == IsoHandled && GenDeclared <= GenHandled;
