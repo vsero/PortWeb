@@ -27,7 +27,7 @@
         </MudStack>
     }
 
-    <MudStack Spacing="2" Class="pa-2">
+    <MudStack Spacing="0" Class="pa-2">
         @foreach (var shipment in _shipments)
         {
             <ShipmentCard @key="shipment.Uuid"

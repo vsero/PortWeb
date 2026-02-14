@@ -38,13 +38,15 @@ jobs:
     - name: Fix base href PROD
       if: github.ref == 'refs/heads/master'
       run: |
-        REPO_NAME="${GITHUB_REPOSITORY#*/}"
+        RAW_NAME="${GITHUB_REPOSITORY#*/}"
+        REPO_NAME="${RAW_NAME,,}"
         sed -i "s|<base href=\"/\" />|<base href=\"/$REPO_NAME/\" />|g" ./publish/wwwroot/index.html
         
     - name: Fix base href DEV
       if: github.ref == 'refs/heads/dev'
       run: |
-        REPO_NAME="${GITHUB_REPOSITORY#*/}"
+        RAW_NAME="${GITHUB_REPOSITORY#*/}"
+        REPO_NAME="${RAW_NAME,,}"
         sed -i "s|<base href=\"/\" />|<base href=\"/$REPO_NAME/dev/\" />|g" ./publish/wwwroot/index.html 
     
     - name: Add 404.html for SPA routing
